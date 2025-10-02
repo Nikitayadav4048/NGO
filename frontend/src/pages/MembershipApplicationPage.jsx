@@ -4,7 +4,7 @@ import { Input } from '../components/ui/input.jsx';
 import { Label } from '../components/ui/label.jsx';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select.jsx';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card.jsx';
-import { ArrowLeft, UserPlus, Plus } from 'lucide-react';
+import { ArrowLeft, UserPlus, Plus, CheckCircle, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const MembershipApplicationPage = () => {
@@ -25,9 +25,24 @@ const MembershipApplicationPage = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Membership application submitted:', formData);
+    setShowSuccessModal(true);
+    setFormData({
+      fullName: '',
+      email: '',
+      phoneNumber: '',
+      occupation: '',
+      address: '',
+      city: '',
+      state: '',
+      pincode: '',
+      areaOfInterest: '',
+      motivation: ''
+    });
   };
 
   const handleChange = (e) => {
@@ -277,6 +292,41 @@ const MembershipApplicationPage = () => {
             </form>
           </CardContent>
         </Card>
+
+        {/* Success Modal */}
+        {showSuccessModal && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-lg max-w-md w-full mx-4 relative shadow-lg">
+              <button
+                onClick={() => setShowSuccessModal(false)}
+                className="absolute top-4 right-4 w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center transition-colors"
+              >
+                <X className="h-4 w-4 text-gray-500" />
+              </button>
+              
+              <div className="p-6 text-center">
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <CheckCircle className="h-8 w-8 text-green-600" />
+                </div>
+                
+                <h3 className="text-xl font-bold text-gray-900 mb-2">
+                  Application Submitted Successfully!
+                </h3>
+                
+                <p className="text-gray-600 mb-6">
+                  Thank you for your interest in joining Orbosis Foundation. We will review your application and contact you soon.
+                </p>
+                
+                <Button
+                  onClick={() => setShowSuccessModal(false)}
+                  className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+                >
+                  Close
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
