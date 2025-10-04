@@ -22,6 +22,15 @@ export const AppProvider = ({ children }) => {
   // Initialize user from localStorage only if exists
   useEffect(() => {
     const initializeUser = () => {
+      // Check if user is on home page and clear auth data
+      if (window.location.pathname === '/') {
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('userData');
+        localStorage.removeItem('role');
+        setCurrentUser(null);
+        return;
+      }
+      
       const token = localStorage.getItem('authToken');
       const userData = localStorage.getItem('userData');
       
