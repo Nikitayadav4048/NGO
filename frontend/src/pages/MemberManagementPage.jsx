@@ -105,6 +105,7 @@ const MemberManagementPage = () => {
             
             alert('Member added successfully!');
             closeModal();
+            loadMembers(); // Refresh the list
         } catch (err) {
             alert('Failed to add member. Please try again.');
         } finally {

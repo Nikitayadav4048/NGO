@@ -4,33 +4,76 @@ import { Input } from '../components/ui/input.jsx';
 import { Label } from '../components/ui/label.jsx';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select.jsx';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card.jsx';
-import { ArrowLeft, Heart, Check } from 'lucide-react';
+import { ArrowLeft, Heart, Check, CheckCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const DonorRegistrationPage = () => {
   const [formData, setFormData] = useState({
     fullName: '',
+    organisationName: '',
     contactNumber: '',
     email: '',
     address: '',
-    city: '',
-    state: '',
-    panGst: '',
-    donationMode: '',
-    emailUpdates: false,
-    whatsappUpdates: false
+    panNumber: '',
+    gstNumber: '',
+    modeofDonation: '',
+    donationAmount: '',
+    donationFrequency: '',
+    consentForUpdate: '',
+    uploadPaymentProof: null
   });
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [submittedData, setSubmittedData] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Donor registration submitted:', formData);
+    
+    // Store submitted data for modal
+    setSubmittedData({ ...formData });
+    
+    // Save donation data
+    const existingDonations = JSON.parse(localStorage.getItem('donations') || '[]');
+    const newDonation = {
+      id: Date.now(),
+      ...formData,
+      amount: parseFloat(formData.donationAmount) || 0,
+      donorName: formData.fullName,
+      donorEmail: formData.email,
+      donorPhone: formData.contactNumber,
+      paymentStatus: 'completed',
+      createdAt: new Date().toISOString()
+    };
+    existingDonations.push(newDonation);
+    localStorage.setItem('donations', JSON.stringify(existingDonations));
+    
+    // Show success modal
+    setShowSuccessModal(true);
+    
+    // Clear form
+    setFormData({
+      fullName: '',
+      organisationName: '',
+      contactNumber: '',
+      email: '',
+      address: '',
+      panNumber: '',
+      gstNumber: '',
+      modeofDonation: '',
+      donationAmount: '',
+      donationFrequency: '',
+      consentForUpdate: '',
+      uploadPaymentProof: null
+    });
+    
+    // Trigger storage event for dashboard update
+    window.dispatchEvent(new Event('storage'));
   };
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type, files } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === 'file' ? files[0] : value
     }));
   };
 
@@ -41,13 +84,9 @@ const DonorRegistrationPage = () => {
     }));
   };
 
-  const donationModes = [
-    'Bank Transfer',
-    'UPI',
-    'Cheque',
-    'In-Kind',
-    'Online Payment'
-  ];
+  const donationModes = ['bankTransfer', 'upi', 'cheque', 'cash'];
+  const frequencies = ['One-time', 'Monthly', 'Quarterly', 'Yearly'];
+  const consentOptions = ['email', 'whatsapp', 'none'];
   useEffect(() => {
   window.scrollTo(0, 0);
   }, []);
@@ -91,190 +130,170 @@ const DonorRegistrationPage = () => {
 
           <CardContent className="px-8 pb-8">
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Personal Information */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Personal Information</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Donor Information</h3>
                 
-                <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="fullName" className="text-sm font-medium text-gray-700">
-                      Full Name *
-                    </Label>
+                    <Label htmlFor="fullName">Name *</Label>
                     <Input
                       id="fullName"
                       name="fullName"
-                      type="text"
                       value={formData.fullName}
                       onChange={handleChange}
-                      placeholder="Enter your full name"
-                      className="w-full h-10 px-3 py-2 border border-gray-300 rounded-md bg-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                       required
                     />
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="contactNumber" className="text-sm font-medium text-gray-700">
-                        Contact Number *
-                      </Label>
-                      <Input
-                        id="contactNumber"
-                        name="contactNumber"
-                        type="tel"
-                        value={formData.contactNumber}
-                        onChange={handleChange}
-                        placeholder="Enter contact number"
-                        className="w-full h-10 px-3 py-2 border border-gray-300 rounded-md bg-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                        required
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="email" className="text-sm font-medium text-gray-700">
-                        Email ID *
-                      </Label>
-                      <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        placeholder="Enter email address"
-                        className="w-full h-10 px-3 py-2 border border-gray-300 rounded-md bg-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                        required
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Address Information */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Address Information (for receipts)</h3>
-                
-                <div className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="address" className="text-sm font-medium text-gray-700">
-                      Address
-                    </Label>
-                    <textarea
-                      id="address"
-                      name="address"
-                      value={formData.address}
+                    <Label htmlFor="organisationName">Organization</Label>
+                    <Input
+                      id="organisationName"
+                      name="organisationName"
+                      value={formData.organisationName}
                       onChange={handleChange}
-                      rows={3}
-                      placeholder="Enter complete address"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500 resize-none"
                     />
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="city" className="text-sm font-medium text-gray-700">
-                        City
-                      </Label>
-                      <Input
-                        id="city"
-                        name="city"
-                        type="text"
-                        value={formData.city}
-                        onChange={handleChange}
-                        placeholder="Enter city"
-                        className="w-full h-10 px-3 py-2 border border-gray-300 rounded-md bg-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                      />
-                    </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="contactNumber">Contact *</Label>
+                    <Input
+                      id="contactNumber"
+                      name="contactNumber"
+                      type="tel"
+                      value={formData.contactNumber}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="state" className="text-sm font-medium text-gray-700">
-                        State
-                      </Label>
-                      <Input
-                        id="state"
-                        name="state"
-                        type="text"
-                        value={formData.state}
-                        onChange={handleChange}
-                        placeholder="Enter state"
-                        className="w-full h-10 px-3 py-2 border border-gray-300 rounded-md bg-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                      />
-                    </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email *</Label>
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                    />
                   </div>
                 </div>
-              </div>
 
-              {/* Tax Information */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Tax Information (for tax receipt if in India)</h3>
-                
                 <div className="space-y-2">
-                  <Label htmlFor="panGst" className="text-sm font-medium text-gray-700">
-                    PAN / GST Number
-                  </Label>
-                  <Input
-                    id="panGst"
-                    name="panGst"
-                    type="text"
-                    value={formData.panGst}
+                  <Label htmlFor="address">Address</Label>
+                  <textarea
+                    id="address"
+                    name="address"
+                    value={formData.address}
                     onChange={handleChange}
-                    placeholder="Enter PAN or GST number"
-                    className="w-full h-10 px-3 py-2 border border-gray-300 rounded-md bg-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                    rows={3}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500"
                   />
                 </div>
               </div>
 
-              {/* Donation Mode */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Preferred Mode of Donation</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Tax Information</h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="panNumber">PAN Number</Label>
+                    <Input
+                      id="panNumber"
+                      name="panNumber"
+                      value={formData.panNumber}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="gstNumber">GST Number</Label>
+                    <Input
+                      id="gstNumber"
+                      name="gstNumber"
+                      value={formData.gstNumber}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Donation Details</h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="modeofDonation">Preferred Mode</Label>
+                    <Select value={formData.modeofDonation} onValueChange={(value) => handleSelectChange('modeofDonation', value)}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select mode" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {donationModes.map((mode) => (
+                          <SelectItem key={mode} value={mode}>
+                            {mode.charAt(0).toUpperCase() + mode.slice(1)}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="donationAmount">Amount</Label>
+                    <Input
+                      id="donationAmount"
+                      name="donationAmount"
+                      type="number"
+                      value={formData.donationAmount}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="donationFrequency">Frequency</Label>
+                    <Select value={formData.donationFrequency} onValueChange={(value) => handleSelectChange('donationFrequency', value)}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select frequency" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {frequencies.map((freq) => (
+                          <SelectItem key={freq} value={freq}>{freq}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="uploadPaymentProof">Upload Payment Proof (Optional)</Label>
+                    <Input
+                      id="uploadPaymentProof"
+                      name="uploadPaymentProof"
+                      type="file"
+                      onChange={handleChange}
+                      accept=".pdf,.jpg,.jpeg,.png"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Consent</h3>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="donationMode" className="text-sm font-medium text-gray-700">
-                    Select Donation Mode
-                  </Label>
-                  <Select value={formData.donationMode} onValueChange={(value) => handleSelectChange('donationMode', value)}>
-                    <SelectTrigger className="w-full h-10 px-3 py-2 border border-gray-300 rounded-md bg-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
-                      <SelectValue placeholder="Select preferred donation mode" />
+                  <Label htmlFor="consentForUpdate">Consent for Updates</Label>
+                  <Select value={formData.consentForUpdate} onValueChange={(value) => handleSelectChange('consentForUpdate', value)}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select preference" />
                     </SelectTrigger>
-                    <SelectContent className="z-50 bg-white border border-gray-200 rounded-md shadow-lg">
-                      {donationModes.map((mode) => (
-                        <SelectItem key={mode} value={mode} className="bg-white hover:bg-gray-50">
-                          {mode}
+                    <SelectContent>
+                      {consentOptions.map((option) => (
+                        <SelectItem key={option} value={option}>
+                          {option.charAt(0).toUpperCase() + option.slice(1)}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
-                </div>
-              </div>
-
-              {/* Consent for Updates */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Consent for Updates</h3>
-                
-                <div className="space-y-3">
-                  <label className="flex items-center space-x-3 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      name="emailUpdates"
-                      checked={formData.emailUpdates}
-                      onChange={handleChange}
-                      className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
-                    />
-                    <span className="text-sm text-gray-700">
-                      I consent to receive updates via email about our programs and impact
-                    </span>
-                  </label>
-
-                  <label className="flex items-center space-x-3 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      name="whatsappUpdates"
-                      checked={formData.whatsappUpdates}
-                      onChange={handleChange}
-                      className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
-                    />
-                    <span className="text-sm text-gray-700">
-                      I consent to receive updates via WhatsApp about our programs and impact
-                    </span>
-                  </label>
                 </div>
               </div>
 
@@ -291,6 +310,62 @@ const DonorRegistrationPage = () => {
           </CardContent>
         </Card>
       </div>
+
+      {/* Success Modal */}
+      {showSuccessModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl max-w-md w-full mx-4 shadow-2xl">
+            <div className="p-6 text-center">
+              <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
+                <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center">
+                  <Heart className="h-10 w-10 text-white" />
+                </div>
+              </div>
+              
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                Thank You! 🙏
+              </h3>
+              
+              <p className="text-gray-600 mb-6">
+                Your donation registration has been submitted successfully. We appreciate your support for women empowerment!
+              </p>
+              
+              <div className="bg-gradient-to-r from-purple-50 to-amber-50 rounded-lg p-4 mb-6">
+                <div className="flex items-center justify-center gap-2 mb-3">
+                  <Heart className="h-5 w-5 text-purple-600" />
+                  <span className="font-semibold text-purple-800">Donation Registered</span>
+                </div>
+                
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Amount:</span>
+                    <span className="font-bold text-green-700">₹{submittedData?.donationAmount || 'Not specified'}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Frequency:</span>
+                    <span className="font-medium">{submittedData?.donationFrequency || 'One-time'}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Mode:</span>
+                    <span className="font-medium">{submittedData?.modeofDonation ? submittedData.modeofDonation.charAt(0).toUpperCase() + submittedData.modeofDonation.slice(1) : 'Not specified'}</span>
+                  </div>
+                </div>
+              </div>
+              
+              <Button
+                onClick={() => setShowSuccessModal(false)}
+                className="w-full bg-purple-600 hover:bg-purple-700"
+              >
+                Continue
+              </Button>
+              
+              <p className="text-xs text-gray-500 mt-4">
+                ✅ Your information has been saved securely
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

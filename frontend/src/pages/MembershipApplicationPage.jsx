@@ -27,22 +27,40 @@ const MembershipApplicationPage = () => {
 
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Membership application submitted:', formData);
-    setShowSuccessModal(true);
-    setFormData({
-      fullName: '',
-      email: '',
-      phoneNumber: '',
-      occupation: '',
-      address: '',
-      city: '',
-      state: '',
-      pincode: '',
-      areaOfInterest: '',
-      motivation: ''
-    });
+    try {
+      const memberData = {
+        fullName: formData.fullName,
+        email: formData.email,
+        contactNumber: formData.phoneNumber,
+        address: `${formData.address}, ${formData.city}, ${formData.state} - ${formData.pincode}`,
+        area: formData.areaOfInterest,
+        state: formData.state,
+        pinCode: formData.pincode,
+        specialRequirement: formData.motivation,
+        age: 25, // Default age
+        gender: 'female' // Default gender
+      };
+      
+      const response = await fetch('http://localhost:5000/api/member/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(memberData)
+      });
+      const data = await response.json();
+      if (data.success) {
+        setShowSuccessModal(true);
+        setFormData({
+          fullName: '', email: '', phoneNumber: '', occupation: '',
+          address: '', city: '', state: '', pincode: '', areaOfInterest: '', motivation: ''
+        });
+      } else {
+        alert('Application failed: ' + data.error);
+      }
+    } catch (error) {
+      alert('Application failed: ' + error.message);
+    }
   };
 
   const handleChange = (e) => {

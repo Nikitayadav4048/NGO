@@ -108,4 +108,14 @@ export async function sendContactUsEmail({ fullName, email, contactNumber, messa
 	});
 }
 
+export async function sendEmail(to, subject, text) {
+	const from = process.env.MAIL_FROM || process.env.SMTP_USER;
+	await transporter.sendMail({
+		from,
+		to,
+		subject,
+		text
+	});
+}
+
 

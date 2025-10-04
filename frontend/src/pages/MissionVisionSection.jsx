@@ -1,12 +1,13 @@
 import React from 'react';
 import { Target, Quote } from 'lucide-react';
+import { siteContent } from '../data/content.js';
 
 const MissionVisionSection = () => {
   const missionVisionData = [
     {
       icon: Target,
       title: 'Our Mission',
-      description: 'To empower women through comprehensive skill development programs, providing them with the tools, knowledge, and support needed to achieve economic independence and become leaders in their communities.',
+      description: siteContent.mission,
       borderColor: 'border-purple-300',
       iconBg: 'bg-purple-100',
       iconColor: 'text-purple-600'
@@ -14,7 +15,7 @@ const MissionVisionSection = () => {
     {
       icon: Target,
       title: 'Our Vision',
-      description: 'A world where every woman has equal access to opportunities, where gender equality is not just an aspiration but a reality, and where women\'s contributions drive sustainable development and social progress.',
+      description: siteContent.vision,
       borderColor: 'border-orange-300',
       iconBg: 'bg-orange-100',
       iconColor: 'text-orange-600'

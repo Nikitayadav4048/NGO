@@ -7,9 +7,10 @@ import { Input } from '../components/ui/input.jsx';
 import { Label } from '../components/ui/label.jsx';
 import { Textarea } from '../components/ui/textarea.jsx';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select.jsx';
-import { UserPlus, Search, MoreVertical, X, Upload } from 'lucide-react';
+import { UserPlus, Search, MoreVertical, X, Upload, Download } from 'lucide-react';
 import DashboardHeader from '../components/DashboardHeader.jsx';
 import Sidebar from '../components/Sidebar.jsx';
+import { exportToExcel, exportToPDF } from '../utils/exportUtils.js';
 import logo from "../assets/Foundation2.png"
 const VolunteerManagementPage = () => {
   const navigate = useNavigate();
@@ -45,15 +46,16 @@ const VolunteerManagementPage = () => {
     fetchVolunteers();
   }, []);
 
-  // Load volunteers from localStorage (offline mode)
-  const fetchVolunteers = () => {
+  // Fetch volunteers from API
+  const fetchVolunteers = async () => {
     try {
       setIsLoadingVolunteers(true);
-      const savedVolunteers = localStorage.getItem('volunteers');
-      if (savedVolunteers) {
-        setVolunteers(JSON.parse(savedVolunteers));
+      const response = await fetch('http://localhost:5000/api/volunteer/all');
+      const data = await response.json();
+      if (data.success) {
+        setVolunteers(data.volunteers);
       } else {
-        // Demo data
+        // Fallback to demo data
         const demoVolunteers = [
           {
             _id: '1',
@@ -65,22 +67,13 @@ const VolunteerManagementPage = () => {
             skills: ['Teaching', 'Communication'],
             createdAt: '2024-01-15',
             createdBy: { fullName: 'Admin User' }
-          },
-          {
-            _id: '2',
-            fullName: 'Anita Devi',
-            email: 'anita@example.com',
-            contactNumber: '+91 87654 32109',
-            area: 'Delhi',
-            state: 'Delhi',
-            skills: ['Healthcare', 'Counseling'],
-            createdAt: '2024-01-10',
-            createdBy: { fullName: 'Admin User' }
           }
         ];
         setVolunteers(demoVolunteers);
-        localStorage.setItem('volunteers', JSON.stringify(demoVolunteers));
       }
+    } catch (error) {
+      console.error('Error fetching volunteers:', error);
+      setVolunteers([]);
     } finally {
       setIsLoadingVolunteers(false);
     }
@@ -213,12 +206,21 @@ const VolunteerManagementPage = () => {
                   <h2 className="text-xl font-semibold text-gray-900">Volunteer Applications</h2>
                 </div>
 
-                <Button
-                  onClick={openModal}
-                  className="bg-blue-600 cursor-pointer hover:bg-blue-700 text-white px-6 py-2 rounded-lg"
-                >
-                  Add Volunteer
-                </Button>
+                <div className="flex gap-2">
+                  <Button
+                    onClick={() => exportToExcel(volunteers, 'volunteers')}
+                    className="bg-green-600 cursor-pointer hover:bg-green-700 text-white px-4 py-2 rounded-lg"
+                  >
+                    <Download className="h-4 w-4 mr-2" />
+                    Export
+                  </Button>
+                  <Button
+                    onClick={openModal}
+                    className="bg-blue-600 cursor-pointer hover:bg-blue-700 text-white px-6 py-2 rounded-lg"
+                  >
+                    Add Volunteer
+                  </Button>
+                </div>
               </div>
 
               {/* Search Section */}

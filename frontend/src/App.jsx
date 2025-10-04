@@ -20,12 +20,15 @@ import MemberDetailPage from './pages/MemberDetailPage'
 import GalleryManagementPage from './pages/GalleryManagementPage'
 import BeneficiaryManagementPage from './pages/BeneficiaryManagementPage'
 import CertificateManagementPage from './pages/CertificateManagementPage'
+import MembershipApplicationsPage from './pages/MembershipApplicationsPage'
 import ProfilePage from './pages/ProfilePage'
 import SettingsPage from './pages/SettingsPage'
 import ContactPage from './pages/ContactPage'
 import Footer from './components/Footer'
 import Analytics from './components/Analytics'
 import WhatsAppButton from './components/WhatsAppButton'
+import TermsPage from './pages/TermsPage'
+import PrivacyPage from './pages/PrivacyPage'
 
 // Main App Component with Sidebar Logic
 const AppContent = () => {
@@ -50,11 +53,14 @@ const AppContent = () => {
           <Route path="/volunteer-detail/:id" element={<VolunteerDetailPage />} />
           <Route path="/member-management" element={<MemberManagementPage />} />
           <Route path="/member-detail/:id" element={<MemberDetailPage />} />
+          <Route path="/membership-applications" element={<MembershipApplicationsPage />} />
           <Route path="/gallery-management" element={<GalleryManagementPage />} />
           <Route path="/beneficiary-management" element={<BeneficiaryManagementPage />} />
           <Route path="/certificate-management" element={<CertificateManagementPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/terms" element={<TermsPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
         </Routes>
       </Router>
     </AppProvider>

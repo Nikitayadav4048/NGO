@@ -58,6 +58,12 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
             roles: ['admin']
         },
         {
+            id: 'membership-applications',
+            label: 'Applications',
+            icon: FileText,
+            roles: ['admin']
+        },
+        {
             id: 'beneficiary-management',
             label: 'Beneficiary',
             icon: Heart,
@@ -153,6 +159,9 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
                 break;
             case 'beneficiary-management':
                 navigate('/beneficiary-management');
+                break;
+            case 'membership-applications':
+                navigate('/membership-applications');
                 break;
             case 'dashboard':
                 navigate('/dashboard');

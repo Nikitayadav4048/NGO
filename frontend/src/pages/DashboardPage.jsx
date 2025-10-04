@@ -29,28 +29,84 @@ const DashboardPage = () => {
 
 
 
-  useEffect(() => {
-    // Use demo data directly to avoid API errors
-    setIsLoading(true);
-    setTimeout(() => {
-      setDashboard({
-        totalMembers: 25,
-        totalVolunteers: 15,
-        totalCertificates: 8,
-        donationAmount: 125000
+  const loadRealTimeData = () => {
+    const members = JSON.parse(localStorage.getItem('members') || '[]');
+    const applications = JSON.parse(localStorage.getItem('membershipApplications') || '[]');
+    const donations = JSON.parse(localStorage.getItem('donations') || '[]');
+    const certificates = JSON.parse(localStorage.getItem('certificates') || '[]');
+    const volunteers = JSON.parse(localStorage.getItem('volunteers') || '[]');
+    
+    const totalDonationAmount = donations.reduce((sum, donation) => sum + (donation.amount || 0), 0);
+    
+    setDashboard({
+      totalMembers: members.length,
+      totalVolunteers: volunteers.length,
+      totalCertificates: certificates.length,
+      donationAmount: totalDonationAmount,
+      pendingApplications: applications.filter(app => app.status === 'Pending').length,
+      approvedApplications: applications.filter(app => app.status === 'Approved').length
+    });
+    
+    // Update recent activities with real data
+    const recentActivities = [];
+    
+    // Add recent applications
+    applications.slice(-3).reverse().forEach(app => {
+      recentActivities.push({
+        id: `app-${app.id}`,
+        action: `New application from ${app.fullName}`,
+        user: app.email,
+        time: new Date(app.submittedAt).toLocaleDateString('en-IN', {
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        })
       });
-      setIsLoading(false);
-    }, 500);
+    });
+    
+    // Add recent members
+    members.slice(-2).reverse().forEach(member => {
+      recentActivities.push({
+        id: `member-${member._id}`,
+        action: `Member approved: ${member.fullName}`,
+        user: member.email,
+        time: new Date(member.createdAt || Date.now()).toLocaleDateString('en-IN', {
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        })
+      });
+    });
+    
+    setRecentActivities(recentActivities.slice(0, 5));
+  };
+
+  useEffect(() => {
+    setIsLoading(true);
+    loadRealTimeData();
+    setIsLoading(false);
+    
+    // Listen for storage changes
+    const handleStorageChange = () => {
+      loadRealTimeData();
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Refresh data every 30 seconds
+    const interval = setInterval(loadRealTimeData, 30000);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      clearInterval(interval);
+    };
   }, []);
 
-  // Set demo recent activities
-  useEffect(() => {
-    setRecentActivities([
-      { id: 1, action: 'VOLUNTEER registered', user: 'priya@example.com', time: '15 Jan 2024, 10:30' },
-      { id: 2, action: 'MEMBER registered', user: 'anita@example.com', time: '14 Jan 2024, 14:20' },
-      { id: 3, action: 'DONOR registered', user: 'sunita@example.com', time: '13 Jan 2024, 09:15' }
-    ]);
-  }, []);
+
 
   const stats = [
     {
@@ -186,53 +242,53 @@ const DashboardPage = () => {
 
         {/* Analytics Overview */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-          {/* Monthly Growth */}
+          {/* Application Status */}
           <Card className="border-0 shadow-sm">
             <CardHeader className="pb-3">
               <CardTitle className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                <TrendingUp className="h-5 w-5 text-green-600" />
-                Monthly Growth
+                <Clock className="h-5 w-5 text-orange-600" />
+                Applications
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">New Members</span>
-                  <span className="text-sm font-medium text-green-600">+24</span>
+                  <span className="text-sm text-gray-600">Pending Review</span>
+                  <span className="text-sm font-medium text-orange-600">{dashboard?.pendingApplications || 0}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">New Volunteers</span>
-                  <span className="text-sm font-medium text-green-600">+12</span>
+                  <span className="text-sm text-gray-600">Approved</span>
+                  <span className="text-sm font-medium text-green-600">{dashboard?.approvedApplications || 0}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">Donations</span>
-                  <span className="text-sm font-medium text-green-600">+₹45,000</span>
+                  <span className="text-sm text-gray-600">Total Members</span>
+                  <span className="text-sm font-medium text-blue-600">{dashboard?.totalMembers || 0}</span>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          {/* Active Tasks */}
+          {/* Real-time Stats */}
           <Card className="border-0 shadow-sm">
             <CardHeader className="pb-3">
               <CardTitle className="text-lg font-semibold text-gray-900 flex items-center gap-2">
                 <Activity className="h-5 w-5 text-blue-600" />
-                Active Tasks
+                Live Stats
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">Pending Reviews</span>
-                  <span className="text-sm font-medium text-orange-600">8</span>
+                  <span className="text-sm text-gray-600">Total Donations</span>
+                  <span className="text-sm font-medium text-green-600">₹{(dashboard?.donationAmount || 0).toLocaleString('en-IN')}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">Completed Today</span>
-                  <span className="text-sm font-medium text-green-600">15</span>
+                  <span className="text-sm text-gray-600">Certificates</span>
+                  <span className="text-sm font-medium text-yellow-600">{dashboard?.totalCertificates || 0}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">In Progress</span>
-                  <span className="text-sm font-medium text-blue-600">6</span>
+                  <span className="text-sm text-gray-600">Volunteers</span>
+                  <span className="text-sm font-medium text-purple-600">{dashboard?.totalVolunteers || 0}</span>
                 </div>
               </div>
             </CardContent>

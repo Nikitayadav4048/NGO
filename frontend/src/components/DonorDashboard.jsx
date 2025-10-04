@@ -2,28 +2,23 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card.jsx';
 import { Badge } from './ui/badge.jsx';
 import { Heart, TrendingUp, Users, Award, Calendar, DollarSign } from 'lucide-react';
+import useRealTimeData from '../hooks/useRealTimeData.js';
+import RealTimeNotification from './RealTimeNotification.jsx';
 
 const DonorDashboard = () => {
-  const [stats, setStats] = useState({});
-  const [recentDonations, setRecentDonations] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-
+  const [user, setUser] = useState(null);
+  
   useEffect(() => {
-    setTimeout(() => {
-      setStats({
-        totalDonated: 125000,
-        donationsCount: 15,
-        impactScore: 85,
-        beneficiariesHelped: 240
-      });
-      setRecentDonations([
-        { id: 1, amount: 5000, date: '2024-01-15', cause: 'Education', status: 'completed' },
-        { id: 2, amount: 10000, date: '2024-01-10', cause: 'Healthcare', status: 'completed' },
-        { id: 3, amount: 2500, date: '2024-01-05', cause: 'Food Support', status: 'completed' }
-      ]);
-      setIsLoading(false);
-    }, 1000);
+    const userData = JSON.parse(localStorage.getItem('user') || '{}');
+    setUser(userData);
   }, []);
+
+  const { data: statsData, isLoading: statsLoading } = useRealTimeData(user?._id, '/donor-stats');
+  const { data: donationsData, isLoading: donationsLoading } = useRealTimeData(user?._id, '/recent-donations');
+  
+  const stats = statsData?.stats || {};
+  const recentDonations = donationsData?.donations || [];
+  const isLoading = statsLoading || donationsLoading;
 
   if (isLoading) {
     return (
@@ -42,10 +37,16 @@ const DonorDashboard = () => {
 
   return (
     <div className="p-6">
+      <RealTimeNotification userId={user?._id} />
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome back, Donor!</h1>
-          <p className="text-gray-600">Track your donations and see the impact you're making.</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome back, {user?.fullName || 'Donor'}!</h1>
+          <p className="text-gray-600">Track your donations and see the impact you're making in real-time.</p>
+          {stats.lastUpdated && (
+            <p className="text-sm text-gray-500 mt-1">
+              Last updated: {new Date(stats.lastUpdated).toLocaleTimeString()}
+            </p>
+          )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">

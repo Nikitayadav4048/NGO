@@ -4,6 +4,7 @@ import { Input } from '../components/ui/input.jsx';
 import { Label } from '../components/ui/label.jsx';
 import { Textarea } from '../components/ui/textarea.jsx';
 import { MapPin, Phone, Mail, Clock, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
+import { siteContent } from '../data/content.js';
 
 const ContactSection = () => {
   const [formData, setFormData] = useState({
@@ -54,8 +55,7 @@ const ContactSection = () => {
                 <div>
                   <h4 className="font-semibold text-gray-900 mb-1 sm:mb-2 text-sm sm:text-base">Address</h4>
                   <p className="text-gray-600 leading-relaxed text-sm sm:text-base">
-                    123 Empowerment Street, Women's Quarter,<br />
-                    New Delhi - 110001 India
+                    {siteContent.contact.address}
                   </p>
                 </div>
               </div>
@@ -67,8 +67,7 @@ const ContactSection = () => {
                 </div>
                 <div>
                   <h4 className="font-semibold text-gray-900 mb-1 sm:mb-2 text-sm sm:text-base">Phone</h4>
-                  <p className="text-gray-600 text-sm sm:text-base">+91 11 2345 6789</p>
-                  <p className="text-gray-600 text-sm sm:text-base">+91 98765 43210</p>
+                  <p className="text-gray-600 text-sm sm:text-base">{siteContent.contact.phone}</p>
                 </div>
               </div>
 
@@ -79,8 +78,7 @@ const ContactSection = () => {
                 </div>
                 <div>
                   <h4 className="font-semibold text-gray-900 mb-1 sm:mb-2 text-sm sm:text-base">Email</h4>
-                  <p className="text-gray-600 text-sm sm:text-base">info@orbosis.org</p>
-                  <p className="text-gray-600 text-sm sm:text-base">contact@orbosis.org</p>
+                  <p className="text-gray-600 text-sm sm:text-base">{siteContent.contact.email}</p>
                 </div>
               </div>
 

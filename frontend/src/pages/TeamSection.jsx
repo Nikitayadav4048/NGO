@@ -1,59 +1,18 @@
 import React, { useState } from 'react';
 import { MapPin, X, Mail } from 'lucide-react';
+import { siteContent } from '../data/content.js';
 
 const TeamSection = () => {
   const [selectedMember, setSelectedMember] = useState(null);
 
-  const teamMembers = [
-    {
-      id: 1,
-      name: 'Dr. Priya Sharma',
-      role: 'Founder & Chairperson',
-      location: 'New Delhi',
-      description: 'Dr. Priya Sharma brings 15 years of experience in social work and women empowerment. She has dedicated her life to creating sustainable change in communities.',
-      skills: ['Leadership', 'Social Work', 'Community Development']
-    },
-    {
-      id: 2,
-      name: 'Ms. Anita Gupta',
-      role: 'Executive Director',
-      location: 'Mumbai',
-      description: 'Ms. Anita Gupta brings 12 years of experience in program management and community development. She specializes in designing and implementing large-scale skill development initiatives.',
-      skills: ['Program Management', 'Community Development', 'Training Design']
-    },
-    {
-      id: 3,
-      name: 'Dr. Kavita Reddy',
-      role: 'Head of Programs',
-      location: 'Bangalore',
-      description: 'Dr. Kavita Reddy has 10 years of experience in educational program design and implementation. She focuses on creating innovative learning solutions for women.',
-      skills: ['Program Design', 'Education', 'Innovation']
-    },
-    {
-      id: 4,
-      name: 'Ms. Ritu Singh',
-      role: 'Regional Coordinator - North',
-      location: 'Lucknow',
-      description: 'Ms. Ritu Singh manages our northern region operations and has been instrumental in expanding our reach to remote communities.',
-      skills: ['Regional Management', 'Outreach', 'Operations']
-    },
-    {
-      id: 5,
-      name: 'Ms. Deepika Patel',
-      role: 'Digital Skills Trainer',
-      location: 'Ahmedabad',
-      description: 'Ms. Deepika Patel specializes in digital literacy programs and has trained hundreds of women in computer skills and online business.',
-      skills: ['Digital Literacy', 'Training', 'Technology']
-    },
-    {
-      id: 6,
-      name: 'Ms. Sunita Rao',
-      role: 'Entrepreneurship Mentor',
-      location: 'Chennai',
-      description: 'Ms. Sunita Rao guides women in starting their own businesses and has helped many become successful entrepreneurs.',
-      skills: ['Entrepreneurship', 'Mentoring', 'Business Development']
-    }
-  ];
+  const teamMembers = siteContent.team.map((member, index) => ({
+    id: index + 1,
+    name: member.name,
+    role: member.position,
+    location: 'Delhi',
+    description: member.bio,
+    skills: ['Leadership', 'Social Work', 'Community Development']
+  }));
 
   const openModal = (member) => {
     setSelectedMember(member);

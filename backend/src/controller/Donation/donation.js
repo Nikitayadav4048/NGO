@@ -124,6 +124,16 @@ export const verifyDonationPayment = async (req, res) => {
         donation.paymentStatus = "completed";
         await donation.save();
 
+        // Emit real-time update to donor
+        const io = req.app?.get('io');
+        if (io) {
+            emitDonorUpdate(io, donation.userId, 'donation-completed', {
+                donationId: donation._id,
+                amount: donation.amount,
+                status: 'completed'
+            });
+        }
+
         res.json({ 
             success: true, 
             message: "Payment verified and donation completed",
@@ -182,4 +192,64 @@ export const getUserDonations = async (req, res) => {
             error: error.message 
         });
     }
+};
+
+// Get real-time donor statistics
+export const getDonorStats = async (req, res) => {
+    try {
+        const userId = req.user._id;
+        
+        const donations = await Donation.find({ userId, paymentStatus: 'completed' });
+        const totalDonated = donations.reduce((sum, d) => sum + d.amount, 0);
+        const donationsCount = donations.length;
+        
+        // Calculate impact metrics
+        const impactScore = Math.min(100, Math.floor(totalDonated / 1000) + donationsCount * 5);
+        const beneficiariesHelped = Math.floor(totalDonated / 500) + donationsCount * 2;
+        
+        const stats = {
+            totalDonated,
+            donationsCount,
+            impactScore,
+            beneficiariesHelped,
+            lastUpdated: new Date()
+        };
+        
+        res.json({ success: true, stats });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+};
+
+// Get recent donations for real-time updates
+export const getRecentDonations = async (req, res) => {
+    try {
+        const userId = req.user._id;
+        
+        const recentDonations = await Donation.find({ userId })
+            .select('amount paymentStatus modeofDonation createdAt')
+            .sort({ createdAt: -1 })
+            .limit(5);
+            
+        const formattedDonations = recentDonations.map(donation => ({
+            id: donation._id,
+            amount: donation.amount,
+            date: donation.createdAt,
+            cause: donation.modeofDonation === 'upi' ? 'Education' : 'Healthcare',
+            status: donation.paymentStatus
+        }));
+        
+        res.json({ success: true, donations: formattedDonations });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+};
+
+// Emit real-time updates when donation status changes
+export const emitDonorUpdate = (io, userId, updateType, data) => {
+    io.to(`donor-${userId}`).emit('donor-update', {
+        type: updateType,
+        data,
+        timestamp: new Date()
+    });
 };

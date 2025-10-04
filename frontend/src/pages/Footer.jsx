@@ -2,6 +2,8 @@ import React from 'react';
 import { Button } from '../components/ui/button.jsx';
 import { Input } from '../components/ui/input.jsx';
 import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { siteContent } from '../data/content.js';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -59,15 +61,15 @@ const Footer = () => {
             <div className="space-y-2 sm:space-y-3 text-gray-300">
               <div className="flex items-start space-x-2">
                 <MapPin className="h-3 w-3 sm:h-4 sm:w-4 text-purple-400 mt-0.5 flex-shrink-0" />
-                <span className="text-xs sm:text-sm">123 Foundation Street, New Delhi, 110001</span>
+                <span className="text-xs sm:text-sm">{siteContent.contact.address}</span>
               </div>
               <div className="flex items-center space-x-2">
                 <Phone className="h-3 w-3 sm:h-4 sm:w-4 text-purple-400 flex-shrink-0" />
-                <span className="text-xs sm:text-sm">+91 11 2345 6789</span>
+                <span className="text-xs sm:text-sm">{siteContent.contact.phone}</span>
               </div>
               <div className="flex items-center space-x-2">
                 <Mail className="h-3 w-3 sm:h-4 sm:w-4 text-purple-400 flex-shrink-0" />
-                <span className="text-xs sm:text-sm">info@orbosis.org</span>
+                <span className="text-xs sm:text-sm">{siteContent.contact.email}</span>
               </div>
             </div>
 
@@ -103,9 +105,9 @@ const Footer = () => {
               </p>
             </div>
             <div className="flex flex-wrap justify-center gap-2 sm:gap-4 text-xs sm:text-sm">
-              <a href="#" className="text-gray-400 hover:text-purple-400 transition-colors">Privacy Policy</a>
+              <Link to="/privacy" className="text-gray-400 hover:text-purple-400 transition-colors">Privacy Policy</Link>
               <span className="text-gray-600">•</span>
-              <a href="#" className="text-gray-400 hover:text-purple-400 transition-colors">Terms & Conditions</a>
+              <Link to="/terms" className="text-gray-400 hover:text-purple-400 transition-colors">Terms & Conditions</Link>
               <span className="text-gray-600">•</span>
               <a href="#" className="text-gray-400 hover:text-purple-400 transition-colors">Transparency</a>
             </div>
