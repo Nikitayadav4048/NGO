@@ -120,6 +120,26 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
             label: 'Impact Report',
             icon: TrendingUp,
             roles: ['donor']
+        },
+
+        // Beneficiary Menu Items
+        {
+            id: 'my-programs',
+            label: 'My Programs',
+            icon: Users,
+            roles: ['beneficiary']
+        },
+        {
+            id: 'my-certificates',
+            label: 'My Certificates',
+            icon: Award,
+            roles: ['beneficiary']
+        },
+        {
+            id: 'available-events',
+            label: 'Events',
+            icon: Calendar,
+            roles: ['beneficiary']
         }
     ];
 

@@ -143,6 +143,7 @@ const LoginPage = () => {
                   <SelectItem value="admin" className="bg-white hover:bg-gray-50 text-sm">Admin</SelectItem>
                   <SelectItem value="volunteer" className="bg-white hover:bg-gray-50 text-sm">Volunteer</SelectItem>
                   <SelectItem value="donor" className="bg-white hover:bg-gray-50 text-sm">Donor</SelectItem>
+                  <SelectItem value="beneficiary" className="bg-white hover:bg-gray-50 text-sm">Beneficiary</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -216,6 +217,19 @@ const LoginPage = () => {
               </Button>
             </div>
           </form>
+
+          {/* Signup Link */}
+          <div className="text-center">
+            <p className="text-xs sm:text-sm text-gray-600">
+              Don't have an account?{' '}
+              <Link 
+                to="/signup" 
+                className="text-purple-600 hover:text-purple-700 hover:underline font-medium"
+              >
+                Sign up here
+              </Link>
+            </p>
+          </div>
 
           {/* Contact Options */}
           <div className="pt-4 sm:pt-6 border-t border-gray-200">

@@ -146,6 +146,19 @@ const Header = () => {
               </Link>
             )}
 
+            {/* Signup Button - Only show when not logged in */}
+            {!hasToken && (
+              <Link to="/signup">
+                <Button
+                  size="sm"
+                  className="hidden sm:flex items-center cursor-pointer gap-2 bg-orange-500 hover:bg-orange-600 text-white px-3 py-2"
+                >
+                  <UserPlus className="h-4 w-4" />
+                  <span className="font-medium text-sm">Sign Up</span>
+                </Button>
+              </Link>
+            )}
+
             {/* Apply for Membership Button - Only show when not logged in */}
             {!hasToken && (
               <Link to="/membership">
@@ -194,6 +207,15 @@ const Header = () => {
                   >
                     <User className="h-4 w-4" />
                     <span className="font-medium">Login</span>
+                  </Button>
+                </Link>
+                <Link to="/signup" className="w-full">
+                  <Button
+                    size="sm"
+                    className="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white cursor-pointer py-3"
+                  >
+                    <UserPlus className="h-4 w-4" />
+                    <span className="font-medium">Sign Up</span>
                   </Button>
                 </Link>
                 <Link to="/membership" className="w-full">

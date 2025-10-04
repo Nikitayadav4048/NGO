@@ -5,11 +5,13 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import Home from './pages/Home'
 import LoginPage from './pages/LoginPage'
+import SignupPage from './pages/SignupPage'
 import MembershipApplicationPage from './pages/MembershipApplicationPage'
 import DonorRegistrationPage from './pages/DonorRegistrationPage'
 import DashboardPage from './pages/DashboardPage'
 import VolunteerManagementPage from './pages/VolunteerManagementPage'
 import VolunteerDetailPage from './pages/VolunteerDetailPage'
+import VolunteerRegistrationPage from './pages/VolunteerRegistrationPage'
 import MemberManagementPage from './pages/MemberManagementPage'
 import Header from './components/Header'
 import Sidebar from './components/Sidebar'
@@ -45,9 +47,11 @@ const AppContent = () => {
             </div>
           } />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
           <Route path="/membership" element={<MembershipApplicationPage />} />
           <Route path="/donor-registration" element={<DonorRegistrationPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/volunteer-registration" element={<VolunteerRegistrationPage />} />
           <Route path="/volunteer-management" element={<VolunteerManagementPage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/volunteer-detail/:id" element={<VolunteerDetailPage />} />

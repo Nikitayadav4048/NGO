@@ -200,6 +200,219 @@ const DashboardPage = () => {
       }
     }
     
+    // Beneficiary-specific content
+    if (currentUser?.role === 'beneficiary') {
+      const [beneficiaryData, setBeneficiaryData] = useState({
+        programs: [],
+        certificates: [],
+        events: []
+      });
+      const [dataLoading, setDataLoading] = useState(true);
+
+      useEffect(() => {
+        const fetchBeneficiaryData = async () => {
+          try {
+            setDataLoading(true);
+            const programs = JSON.parse(localStorage.getItem('beneficiaryPrograms') || '[]');
+            const certificates = JSON.parse(localStorage.getItem('beneficiaryCertificates') || '[]');
+            const events = JSON.parse(localStorage.getItem('availableEvents') || '[]');
+            
+            setBeneficiaryData({ programs, certificates, events });
+          } catch (error) {
+            console.error('Error fetching beneficiary data:', error);
+          } finally {
+            setDataLoading(false);
+          }
+        };
+        
+        fetchBeneficiaryData();
+      }, [activeTab]);
+
+      if (dataLoading) {
+        return (
+          <div className="p-6">
+            <div className="max-w-7xl mx-auto">
+              <div className="text-center py-12">
+                <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="w-8 h-8 border-2 border-purple-600 border-t-transparent rounded-full animate-spin"></div>
+                </div>
+                <h3 className="text-lg font-medium text-gray-900 mb-2">Loading...</h3>
+                <p className="text-gray-500">Please wait while we fetch your data.</p>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      switch (activeTab) {
+        case 'my-programs':
+          return (
+            <div className="p-6">
+              <div className="max-w-7xl mx-auto">
+                <div className="mb-8">
+                  <h1 className="text-3xl font-bold text-gray-900 mb-2">My Programs</h1>
+                  <p className="text-gray-600">View your enrolled programs and services.</p>
+                </div>
+                {beneficiaryData.programs.length === 0 ? (
+                  <Card className="border-0 shadow-sm">
+                    <CardContent className="p-12 text-center">
+                      <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                      <h3 className="text-lg font-medium text-gray-900 mb-2">No Programs Found</h3>
+                      <p className="text-gray-500">You are not enrolled in any programs yet.</p>
+                    </CardContent>
+                  </Card>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {beneficiaryData.programs.map((program) => (
+                      <Card key={program.id} className="border-0 shadow-sm">
+                        <CardContent className="p-6">
+                          <h3 className="font-semibold text-gray-900 mb-2">{program.title}</h3>
+                          <p className="text-sm text-gray-600 mb-3">{program.description}</p>
+                          <div className="flex justify-between items-center">
+                            <span className={`text-xs px-2 py-1 rounded ${
+                              program.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'
+                            }`}>
+                              {program.status}
+                            </span>
+                            <span className="text-xs text-gray-500">Progress: {program.progress}%</span>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        case 'my-certificates':
+          return (
+            <div className="p-6">
+              <div className="max-w-7xl mx-auto">
+                <div className="mb-8">
+                  <h1 className="text-3xl font-bold text-gray-900 mb-2">My Certificates</h1>
+                  <p className="text-gray-600">View and download your earned certificates.</p>
+                </div>
+                {beneficiaryData.certificates.length === 0 ? (
+                  <Card className="border-0 shadow-sm">
+                    <CardContent className="p-12 text-center">
+                      <Award className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                      <h3 className="text-lg font-medium text-gray-900 mb-2">No Certificates Found</h3>
+                      <p className="text-gray-500">You haven't earned any certificates yet.</p>
+                    </CardContent>
+                  </Card>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {beneficiaryData.certificates.map((certificate) => (
+                      <Card key={certificate.id} className="border-0 shadow-sm">
+                        <CardContent className="p-6 text-center">
+                          <div className="p-3 rounded-full bg-yellow-100 w-fit mx-auto mb-4">
+                            <Award className="h-6 w-6 text-yellow-600" />
+                          </div>
+                          <h3 className="font-semibold text-gray-900 mb-2">{certificate.title}</h3>
+                          <p className="text-sm text-gray-600 mb-3">Completed: {new Date(certificate.completedDate).toLocaleDateString()}</p>
+                          <Button size="sm" className="bg-purple-600 hover:bg-purple-700 text-white">
+                            Download
+                          </Button>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        case 'available-events':
+          return (
+            <div className="p-6">
+              <div className="max-w-7xl mx-auto">
+                <div className="mb-8">
+                  <h1 className="text-3xl font-bold text-gray-900 mb-2">Available Events</h1>
+                  <p className="text-gray-600">Discover and register for upcoming events and workshops.</p>
+                </div>
+                {beneficiaryData.events.length === 0 ? (
+                  <Card className="border-0 shadow-sm">
+                    <CardContent className="p-12 text-center">
+                      <Calendar className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                      <h3 className="text-lg font-medium text-gray-900 mb-2">No Events Found</h3>
+                      <p className="text-gray-500">There are no upcoming events at the moment.</p>
+                    </CardContent>
+                  </Card>
+                ) : (
+                  <div className="space-y-6">
+                    {beneficiaryData.events.map((event) => (
+                      <Card key={event.id} className="border-0 shadow-sm">
+                        <CardContent className="p-6">
+                          <div className="flex justify-between items-start mb-4">
+                            <div>
+                              <h3 className="font-semibold text-gray-900 mb-2">{event.title}</h3>
+                              <p className="text-sm text-gray-600 mb-3">{event.description}</p>
+                              <div className="flex items-center gap-4 text-sm text-gray-500">
+                                <span className="flex items-center gap-1">
+                                  <Calendar className="h-4 w-4" />
+                                  {new Date(event.date).toLocaleDateString()}
+                                </span>
+                                <span>{event.time}</span>
+                              </div>
+                            </div>
+                            <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white">
+                              Register
+                            </Button>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        case 'dashboard':
+        default:
+          return (
+            <div className="p-6">
+              <div className="max-w-7xl mx-auto">
+                <div className="mb-8">
+                  <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome, Beneficiary!</h1>
+                  <p className="text-gray-600">Access your programs and support services.</p>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <Card className="border-0 shadow-sm hover:shadow-md transition-shadow cursor-pointer" onClick={() => setActiveTab('my-programs')}>
+                    <CardContent className="p-6 text-center">
+                      <div className="p-3 rounded-full bg-blue-100 w-fit mx-auto mb-4">
+                        <Users className="h-6 w-6 text-blue-600" />
+                      </div>
+                      <h3 className="font-semibold text-gray-900 mb-2">My Programs</h3>
+                      <p className="text-sm text-gray-600">View enrolled programs and services</p>
+                    </CardContent>
+                  </Card>
+                  
+                  <Card className="border-0 shadow-sm hover:shadow-md transition-shadow cursor-pointer" onClick={() => setActiveTab('my-certificates')}>
+                    <CardContent className="p-6 text-center">
+                      <div className="p-3 rounded-full bg-green-100 w-fit mx-auto mb-4">
+                        <Award className="h-6 w-6 text-green-600" />
+                      </div>
+                      <h3 className="font-semibold text-gray-900 mb-2">My Certificates</h3>
+                      <p className="text-sm text-gray-600">View earned certificates</p>
+                    </CardContent>
+                  </Card>
+                  
+                  <Card className="border-0 shadow-sm hover:shadow-md transition-shadow cursor-pointer" onClick={() => setActiveTab('available-events')}>
+                    <CardContent className="p-6 text-center">
+                      <div className="p-3 rounded-full bg-purple-100 w-fit mx-auto mb-4">
+                        <Calendar className="h-6 w-6 text-purple-600" />
+                      </div>
+                      <h3 className="font-semibold text-gray-900 mb-2">Upcoming Events</h3>
+                      <p className="text-sm text-gray-600">View available events and workshops</p>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+            </div>
+          );
+      }
+    }
+    
     // Admin dashboard (existing content)
     return (
       <div className="p-4 sm:p-6">
