@@ -19,7 +19,7 @@ export const AppProvider = ({ children }) => {
   const [certificates, setCertificates] = useState([]);
   const [messages, setMessages] = useState([]);
 
-  // Initialize user from localStorage (fallback for demo)
+  // Initialize user from localStorage only if exists
   useEffect(() => {
     const initializeUser = () => {
       const token = localStorage.getItem('authToken');
@@ -33,18 +33,10 @@ export const AppProvider = ({ children }) => {
           console.error('Error parsing user data:', error);
           localStorage.removeItem('authToken');
           localStorage.removeItem('userData');
+          setCurrentUser(null);
         }
       } else {
-        // Demo user for testing
-        const demoUser = {
-          name: 'Admin User',
-          email: 'admin@orbosis.org',
-          role: 'admin',
-          id: 'demo-admin-123'
-        };
-        setCurrentUser(demoUser);
-        localStorage.setItem('userData', JSON.stringify(demoUser));
-        localStorage.setItem('authToken', 'demo-token');
+        setCurrentUser(null);
       }
     };
 

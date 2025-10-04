@@ -56,8 +56,18 @@ const Header = () => {
   // Check for token on component mount and when currentUser changes
   useEffect(() => {
     const token = localStorage.getItem('authToken');
-    setHasToken(!!token);
+    const userData = localStorage.getItem('userData');
+    
+    // Only set hasToken to true if both token and userData exist
+    setHasToken(!!(token && userData));
   }, [currentUser]);
+
+  // Initialize hasToken state on component mount
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    const userData = localStorage.getItem('userData');
+    setHasToken(!!(token && userData));
+  }, []);
 
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
