@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '../components/ui/card.jsx';
 import img1 from '../assets/women-empowerment/img1.jpg';
 import img2 from '../assets/women-empowerment/img2.jpg';
@@ -14,6 +14,18 @@ import img11 from '../assets/women-empowerment/img11.jpg';
 
 const GallerySection = () => {
   const [showAll, setShowAll] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+    
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
 
   const allImages = [
     { id: 1, src: img1, alt: 'Women Empowerment Workshop' },
@@ -30,7 +42,7 @@ const GallerySection = () => {
     { id: 12, src: img1, alt: 'Women Leadership Program' }
   ];
 
-  const displayedImages = showAll ? allImages : allImages.slice(0, 2);
+  const displayedImages = showAll ? allImages : (isMobile ? allImages.slice(0, 2) : allImages.slice(0, 8));
 
 
   return (
