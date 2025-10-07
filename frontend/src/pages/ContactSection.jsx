@@ -103,9 +103,6 @@ const ContactSection = () => {
                 <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-600 rounded-full flex items-center justify-center cursor-pointer hover:bg-blue-700 transition-colors">
                   <Facebook className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
                 </div>
-                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-sky-500 rounded-full flex items-center justify-center cursor-pointer hover:bg-sky-600 transition-colors">
-                  <Twitter className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
-                </div>
                 <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-pink-500 to-red-500 rounded-full flex items-center justify-center cursor-pointer hover:from-pink-600 hover:to-red-600 transition-colors">
                   <Instagram className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
                 </div>

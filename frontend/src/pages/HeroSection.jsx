@@ -79,7 +79,7 @@ const HeroSection = () => {
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 lg:gap-8">
+            {/* <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 lg:gap-8">
               <div className="text-center">
                 <div className="flex justify-center mb-3">
                   <div className="p-2 sm:p-3 bg-purple-100 rounded-full">
@@ -109,7 +109,7 @@ const HeroSection = () => {
                 <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">25+</div>
                 <div className="text-xs sm:text-sm text-gray-600">{t('hero.stats.states')}</div>
               </div>
-            </div>
+            </div> */}
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
