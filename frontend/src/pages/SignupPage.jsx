@@ -33,21 +33,51 @@ const SignupPage = () => {
     }
 
     try {
-      const userData = {
-        id: Date.now().toString(),
-        name: formData.name,
-        email: formData.email,
-        role: formData.role,
-        joinDate: new Date().toISOString()
-      };
+      const response = await fetch('http://localhost:5000/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          role: formData.role
+        })
+      });
 
-      localStorage.setItem('authToken', 'demo-token-' + Date.now());
-      localStorage.setItem('userData', JSON.stringify(userData));
-      setCurrentUser(userData);
-      
-      navigate('/dashboard');
+      // Check if response is JSON
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        throw new Error('Backend server is not running. Please start the server and try again.');
+      }
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        // Store token and user data
+        if (data.token) {
+          localStorage.setItem('authToken', data.token);
+        }
+        if (data.user) {
+          localStorage.setItem('userData', JSON.stringify(data.user));
+          setCurrentUser(data.user);
+        }
+        
+        alert('Account created successfully!');
+        navigate('/dashboard');
+      } else {
+        setError(data.message || 'Signup failed. Please try again.');
+      }
     } catch (err) {
-      setError('Signup failed. Please try again.');
+      console.error('Signup error:', err);
+      if (err.message.includes('Backend server')) {
+        setError('Backend server is not running. Please start the server first.');
+      } else if (err.name === 'SyntaxError') {
+        setError('Backend server is not responding. Please check if the server is running.');
+      } else {
+        setError('Network error. Please check your connection and try again.');
+      }
     } finally {
       setLoading(false);
     }

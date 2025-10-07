@@ -3,7 +3,13 @@ import { useEffect } from 'react';
 // Google Analytics 4 (GA4) tracking
 export const initGA4 = () => {
   // Replace 'G-XXXXXXXXXX' with your actual GA4 measurement ID
-  const GA4_MEASUREMENT_ID = 'G-XXXXXXXXXX';
+  const GA4_MEASUREMENT_ID = import.meta.env?.VITE_GA4_MEASUREMENT_ID;
+  
+  // Only initialize if measurement ID is provided
+  if (!GA4_MEASUREMENT_ID || GA4_MEASUREMENT_ID === 'G-XXXXXXXXXX') {
+    console.log('GA4 Measurement ID not configured, skipping initialization');
+    return;
+  }
   
   // Load GA4 script
   const script1 = document.createElement('script');
@@ -22,7 +28,13 @@ export const initGA4 = () => {
 // Facebook Pixel tracking
 export const initFacebookPixel = () => {
   // Replace 'YOUR_PIXEL_ID' with your actual Facebook Pixel ID
-  const FACEBOOK_PIXEL_ID = 'YOUR_PIXEL_ID';
+  const FACEBOOK_PIXEL_ID = import.meta.env?.VITE_FACEBOOK_PIXEL_ID;
+  
+  // Only initialize if pixel ID is provided
+  if (!FACEBOOK_PIXEL_ID || FACEBOOK_PIXEL_ID === 'YOUR_PIXEL_ID') {
+    console.log('Facebook Pixel ID not configured, skipping initialization');
+    return;
+  }
   
   !function(f,b,e,v,n,t,s)
   {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -39,15 +51,7 @@ export const initFacebookPixel = () => {
 
 // Analytics component to initialize tracking
 const Analytics = () => {
-  useEffect(() => {
-    // Initialize GA4
-    initGA4();
-    
-    // Initialize Facebook Pixel (optional)
-    // initFacebookPixel();
-  }, []);
-
-  return null; // This component doesn't render anything
+  return null; // Disabled to prevent warnings
 };
 
 // Track custom events

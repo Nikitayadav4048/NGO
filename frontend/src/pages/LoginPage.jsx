@@ -12,7 +12,11 @@ import api from '../config/api.js';
 const LoginPage = () => {
   const { setCurrentUser } = useAppContext();
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    role: '',
+    email: '',
+    password: ''
+  });
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {

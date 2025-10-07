@@ -22,8 +22,8 @@ const BeneficiaryManagementPage = () => {
   }, []);
 
   const filteredBeneficiaries = beneficiaries.filter(beneficiary =>
-    beneficiary.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    beneficiary.location.toLowerCase().includes(searchTerm.toLowerCase())
+    (beneficiary.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (beneficiary.location || '').toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const exportData = () => {

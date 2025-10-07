@@ -29,60 +29,52 @@ const DashboardPage = () => {
 
 
 
-  const loadRealTimeData = () => {
-    const members = JSON.parse(localStorage.getItem('members') || '[]');
-    const applications = JSON.parse(localStorage.getItem('membershipApplications') || '[]');
-    const donations = JSON.parse(localStorage.getItem('donations') || '[]');
-    const certificates = JSON.parse(localStorage.getItem('certificates') || '[]');
-    const volunteers = JSON.parse(localStorage.getItem('volunteers') || '[]');
-    
-    const totalDonationAmount = donations.reduce((sum, donation) => sum + (donation.amount || 0), 0);
-    
-    setDashboard({
-      totalMembers: members.length,
-      totalVolunteers: volunteers.length,
-      totalCertificates: certificates.length,
-      donationAmount: totalDonationAmount,
-      pendingApplications: applications.filter(app => app.status === 'Pending').length,
-      approvedApplications: applications.filter(app => app.status === 'Approved').length
-    });
-    
-    // Update recent activities with real data
-    const recentActivities = [];
-    
-    // Add recent applications
-    applications.slice(-3).reverse().forEach(app => {
-      recentActivities.push({
-        id: `app-${app.id}`,
-        action: `New application from ${app.fullName}`,
-        user: app.email,
-        time: new Date(app.submittedAt).toLocaleDateString('en-IN', {
-          day: 'numeric',
-          month: 'short',
-          year: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit'
-        })
+  const loadRealTimeData = async () => {
+    try {
+      const token = localStorage.getItem('authToken');
+      if (!token) return;
+
+      const response = await fetch('http://localhost:5000/api/auth/getAdminDashboard', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
       });
-    });
-    
-    // Add recent members
-    members.slice(-2).reverse().forEach(member => {
-      recentActivities.push({
-        id: `member-${member._id}`,
-        action: `Member approved: ${member.fullName}`,
-        user: member.email,
-        time: new Date(member.createdAt || Date.now()).toLocaleDateString('en-IN', {
-          day: 'numeric',
-          month: 'short',
-          year: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit'
-        })
+      
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          setDashboard(data.data);
+        }
+      }
+      
+      // Fetch recent activities
+      const activityResponse = await fetch('http://localhost:5000/api/auth/getRecentActivity', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
       });
-    });
-    
-    setRecentActivities(recentActivities.slice(0, 5));
+      
+      if (activityResponse.ok) {
+        const activityData = await activityResponse.json();
+        if (activityData.success) {
+          setRecentActivities(activityData.data || []);
+        }
+      }
+    } catch (error) {
+      console.error('Error loading dashboard data:', error);
+      // Fallback to empty data
+      setDashboard({
+        totalMembers: 0,
+        totalVolunteers: 0,
+        totalCertificates: 0,
+        donationAmount: 0,
+        pendingApplications: 0,
+        approvedApplications: 0
+      });
+      setRecentActivities([]);
+    }
   };
 
   useEffect(() => {

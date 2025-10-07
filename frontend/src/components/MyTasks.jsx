@@ -100,9 +100,9 @@ const MyTasks = () => {
     // Filter by search term
     if (searchTerm) {
       filtered = filtered.filter(task =>
-        task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        task.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        task.category.toLowerCase().includes(searchTerm.toLowerCase())
+        (task.title || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (task.description || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (task.category || '').toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 

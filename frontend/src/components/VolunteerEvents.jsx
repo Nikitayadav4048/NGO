@@ -125,10 +125,10 @@ const VolunteerEvents = () => {
     // Filter by search term
     if (searchTerm) {
       filtered = filtered.filter(event =>
-        event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        event.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        event.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        event.category.toLowerCase().includes(searchTerm.toLowerCase())
+        (event.title || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (event.description || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (event.location || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (event.category || '').toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
@@ -156,7 +156,7 @@ const VolunteerEvents = () => {
   };
 
   const getCategoryColor = (category) => {
-    switch (category.toLowerCase()) {
+    switch ((category || '').toLowerCase()) {
       case 'workshop': return 'bg-purple-100 text-purple-800';
       case 'training': return 'bg-blue-100 text-blue-800';
       case 'fair': return 'bg-green-100 text-green-800';

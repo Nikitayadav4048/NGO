@@ -20,7 +20,7 @@ export const register = async (req, res) => {
 
         const hash = await bcrypt.hash(password, 10);
 
-        const cleanName = fullName.toLowerCase().replace(/\s+/g, '');
+        const cleanName = (fullName || 'user').toLowerCase().replace(/\s+/g, '');
         const randomNumbers = Math.floor(Math.random() * 900) + 100;
         let memberId = cleanName + randomNumbers;
 
@@ -276,7 +276,7 @@ export const createVolunteerByAdmin = async (req, res) => {
             return res.status(400).json({ message: 'Email already exists' });
         }
 
-        const cleanName = fullName.toLowerCase().replace(/\s+/g, '');
+        const cleanName = (fullName || 'volunteer').toLowerCase().replace(/\s+/g, '');
         const randomNumbers = Math.floor(Math.random() * 900) + 100;
         let memberId = cleanName + randomNumbers;
 
@@ -372,7 +372,7 @@ export const createMemberByAdmin = async (req, res) => {
             return res.status(400).json({ message: 'Email already exists' });
         }
 
-        const cleanName = fullName.toLowerCase().replace(/\s+/g, '');
+        const cleanName = (fullName || 'member').toLowerCase().replace(/\s+/g, '');
         const randomNumbers = Math.floor(Math.random() * 900) + 100;
         let memberId = cleanName + randomNumbers;
 

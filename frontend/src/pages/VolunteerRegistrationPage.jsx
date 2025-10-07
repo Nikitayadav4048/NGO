@@ -27,10 +27,25 @@ const VolunteerRegistrationPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const formDataToSend = new FormData();
+      formDataToSend.append('fullName', formData.fullName);
+      formDataToSend.append('gender', formData.gender);
+      formDataToSend.append('dob', formData.dob);
+      formDataToSend.append('contactNumber', formData.contactNumber);
+      formDataToSend.append('email', formData.email);
+      formDataToSend.append('address', formData.address);
+      formDataToSend.append('skills', formData.skills);
+      formDataToSend.append('profession', formData.profession);
+      formDataToSend.append('areaOfVolunteering', formData.areaOfVolunteering);
+      formDataToSend.append('availability', formData.availability);
+      formDataToSend.append('emergencyContactNumber', formData.emergencyContactNumber);
+      if (formData.uploadIdProof) {
+        formDataToSend.append('uploadIdProof', formData.uploadIdProof);
+      }
+
       const response = await fetch('http://localhost:5000/api/volunteer/register', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: formDataToSend
       });
       const data = await response.json();
       if (data.success) {
@@ -41,9 +56,10 @@ const VolunteerRegistrationPage = () => {
           availability: '', emergencyContactNumber: '', uploadIdProof: null, termsAccepted: false
         });
       } else {
-        alert('Registration failed: ' + data.error);
+        alert('Registration failed: ' + (data.message || data.error));
       }
     } catch (error) {
+      console.error('Registration error:', error);
       alert('Registration failed: ' + error.message);
     }
   };

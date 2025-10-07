@@ -24,9 +24,11 @@ authRouter.post("/contactUs", contactUs);
 
 // Get current user details
 authRouter.get("/me", requireAuth, getUserDetails);
+authRouter.get("/profile", requireAuth, getUserDetails);
 
 // Update current user details (with optional file: profilePic)
 authRouter.put("/updateMe", requireAuth, cloudinaryImageUpload.single('profilePic'), updateUserDetails);
+authRouter.put("/updateProfile", requireAuth, updateUserDetails);
 
 
 // Admin only route to create volunteers

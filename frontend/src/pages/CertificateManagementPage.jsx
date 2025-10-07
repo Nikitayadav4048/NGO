@@ -20,8 +20,8 @@ const CertificateManagementPage = () => {
   }, []);
 
   const filteredCertificates = certificates.filter(cert =>
-    cert.recipient.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    cert.course.toLowerCase().includes(searchTerm.toLowerCase())
+    (cert.recipient || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (cert.course || '').toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const generatePDF = (certificate) => {

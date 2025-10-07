@@ -23,8 +23,8 @@ const DonationHistory = () => {
   }, []);
 
   const filteredDonations = donations.filter(donation =>
-    donation.cause.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    donation.receipt.toLowerCase().includes(searchTerm.toLowerCase())
+    (donation.cause || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (donation.receipt || '').toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   if (isLoading) {

@@ -25,48 +25,90 @@ const DonorRegistrationPage = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [submittedData, setSubmittedData] = useState(null);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Store submitted data for modal
-    setSubmittedData({ ...formData });
-    
-    // Save donation data
-    const existingDonations = JSON.parse(localStorage.getItem('donations') || '[]');
-    const newDonation = {
-      id: Date.now(),
-      ...formData,
-      amount: parseFloat(formData.donationAmount) || 0,
-      donorName: formData.fullName,
-      donorEmail: formData.email,
-      donorPhone: formData.contactNumber,
-      paymentStatus: 'completed',
-      createdAt: new Date().toISOString()
-    };
-    existingDonations.push(newDonation);
-    localStorage.setItem('donations', JSON.stringify(existingDonations));
-    
-    // Show success modal
-    setShowSuccessModal(true);
-    
-    // Clear form
-    setFormData({
-      fullName: '',
-      organisationName: '',
-      contactNumber: '',
-      email: '',
-      address: '',
-      panNumber: '',
-      gstNumber: '',
-      modeofDonation: '',
-      donationAmount: '',
-      donationFrequency: '',
-      consentForUpdate: '',
-      uploadPaymentProof: null
-    });
-    
-    // Trigger storage event for dashboard update
-    window.dispatchEvent(new Event('storage'));
+    try {
+      const formDataToSend = new FormData();
+      formDataToSend.append('donorName', formData.fullName);
+      formDataToSend.append('organisationName', formData.organisationName);
+      formDataToSend.append('contactNumber', formData.contactNumber);
+      formDataToSend.append('email', formData.email);
+      formDataToSend.append('address', formData.address);
+      formDataToSend.append('panNumber', formData.panNumber);
+      formDataToSend.append('gstNumber', formData.gstNumber);
+      formDataToSend.append('modeofDonation', formData.modeofDonation);
+      formDataToSend.append('amount', formData.donationAmount);
+      formDataToSend.append('donationFrequency', formData.donationFrequency);
+      formDataToSend.append('consentForUpdate', formData.consentForUpdate);
+      if (formData.uploadPaymentProof) {
+        formDataToSend.append('uploadPaymentProof', formData.uploadPaymentProof);
+      }
+
+      const response = await fetch('http://localhost:5000/api/donation/createOrder', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          donorName: formData.fullName,
+          organisationName: formData.organisationName,
+          contactNumber: formData.contactNumber,
+          email: formData.email,
+          address: formData.address,
+          panNumber: formData.panNumber,
+          gstNumber: formData.gstNumber,
+          modeofDonation: formData.modeofDonation,
+          amount: parseFloat(formData.donationAmount) || 0,
+          donationFrequency: formData.donationFrequency,
+          consentForUpdate: formData.consentForUpdate
+        })
+      });
+      
+      // Check if response is JSON
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        throw new Error('Backend server is not running. Please start the server and try again.');
+      }
+
+      const data = await response.json();
+      
+      if (data.success) {
+        // Store submitted data for modal
+        setSubmittedData({ ...formData });
+        
+        // Show success modal
+        setShowSuccessModal(true);
+        
+        // Clear form
+        setFormData({
+          fullName: '',
+          organisationName: '',
+          contactNumber: '',
+          email: '',
+          address: '',
+          panNumber: '',
+          gstNumber: '',
+          modeofDonation: '',
+          donationAmount: '',
+          donationFrequency: '',
+          consentForUpdate: '',
+          uploadPaymentProof: null
+        });
+      } else {
+        alert('Registration failed: ' + (data.message || data.error));
+      }
+    } catch (error) {
+      console.error('Donation registration error:', error);
+      if (error.message.includes('Backend server')) {
+        alert('Backend server is not running. Please start the server first.');
+      } else if (error.name === 'SyntaxError') {
+        alert('Backend server is not responding. Please check if the server is running.');
+      } else {
+        alert('Registration failed: ' + error.message);
+      }
+    }
   };
 
   const handleChange = (e) => {

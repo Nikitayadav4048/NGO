@@ -21,8 +21,8 @@ const MembershipApplicationsPage = () => {
   }, []);
 
   const filteredApplications = applications.filter(app => {
-    const matchesSearch = app.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         app.email.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = (app.fullName || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         (app.email || '').toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === 'All' || app.status === statusFilter;
     return matchesSearch && matchesStatus;
   });

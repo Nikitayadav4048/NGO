@@ -17,7 +17,8 @@ import {
   X,
   Star,
   TrendingUp,
-  FileText
+  FileText,
+  Briefcase
 } from 'lucide-react';
 import { useAppContext } from '../contexts/AppContext.jsx';
 
@@ -27,58 +28,95 @@ const VolunteerProfile = () => {
   const [profile, setProfile] = useState({});
   const [editedProfile, setEditedProfile] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    // Simulate API call to fetch volunteer profile
-    setTimeout(() => {
-      const mockProfile = {
-        id: 'vol_123',
-        fullName: 'Priya Sharma',
-        email: 'priya.sharma@example.com',
-        phone: '+91 98765 43210',
-        dateOfBirth: '1995-06-15',
-        age: 28,
-        gender: 'Female',
-        address: '123 MG Road, Bandra West',
-        city: 'Mumbai',
-        state: 'Maharashtra',
-        pincode: '400050',
-        profession: 'Software Engineer',
-        skills: ['Teaching', 'Digital Literacy', 'Communication', 'Project Management'],
-        preferredArea: 'Training',
-        availability: 'Weekend',
-        joinDate: '2023-08-15',
-        emergencyContact: '+91 98765 43211',
-        // Stats
-        totalHours: 145,
-        tasksCompleted: 23,
-        eventsAttended: 8,
-        certificatesEarned: 4,
-        impactScore: 92,
-        rating: 4.8,
-        // Recent achievements
-        recentAchievements: [
-          { id: 1, title: 'Top Volunteer of the Month', date: '2024-01-01', type: 'award' },
-          { id: 2, title: 'Digital Literacy Trainer Certification', date: '2023-12-15', type: 'certificate' },
-          { id: 3, title: '100 Hours Milestone', date: '2023-11-20', type: 'milestone' }
-        ]
-      };
-      setProfile(mockProfile);
-      setEditedProfile(mockProfile);
-      setIsLoading(false);
-    }, 1000);
+    fetchUserProfile();
   }, []);
+
+  const fetchUserProfile = async () => {
+    try {
+      const token = localStorage.getItem('authToken');
+      const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+      
+      if (!token) {
+        setError('No authentication token found');
+        setIsLoading(false);
+        return;
+      }
+
+      const response = await fetch('http://localhost:5000/api/auth/profile', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          setProfile(data.user);
+          setEditedProfile(data.user);
+        } else {
+          // Fallback to localStorage data
+          setProfile(userData);
+          setEditedProfile(userData);
+        }
+      } else {
+        // Fallback to localStorage data
+        setProfile(userData);
+        setEditedProfile(userData);
+      }
+    } catch (error) {
+      console.error('Error fetching profile:', error);
+      // Fallback to localStorage data
+      const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+      setProfile(userData);
+      setEditedProfile(userData);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleEdit = () => {
     setIsEditing(true);
   };
 
-  const handleSave = () => {
-    // Simulate API call to update profile
-    setProfile(editedProfile);
-    setIsEditing(false);
-    // Show success message
-    alert('Profile updated successfully!');
+  const handleSave = async () => {
+    try {
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        alert('Authentication required');
+        return;
+      }
+
+      const response = await fetch('http://localhost:5000/api/auth/updateProfile', {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(editedProfile)
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          setProfile(editedProfile);
+          // Update localStorage
+          localStorage.setItem('userData', JSON.stringify(editedProfile));
+          setIsEditing(false);
+          alert('Profile updated successfully!');
+        } else {
+          alert('Failed to update profile: ' + (data.message || 'Unknown error'));
+        }
+      } else {
+        alert('Failed to update profile. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      alert('Error updating profile. Please try again.');
+    }
   };
 
   const handleCancel = () => {
@@ -154,24 +192,21 @@ const VolunteerProfile = () => {
                 <div className="flex items-center gap-6">
                   <div className="w-24 h-24 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center">
                     <span className="text-white font-bold text-2xl">
-                      {profile.fullName?.charAt(0)?.toUpperCase()}
+                      {(profile.fullName || profile.name || 'U')?.charAt(0)?.toUpperCase()}
                     </span>
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
-                      <h2 className="text-2xl font-bold text-gray-900">{profile.fullName}</h2>
-                      <div className="flex items-center gap-1">
-                        <Star className="h-4 w-4 text-yellow-500 fill-current" />
-                        <span className="text-sm font-medium text-gray-600">{profile.rating}</span>
-                      </div>
+                      <h2 className="text-2xl font-bold text-gray-900">{profile.fullName || profile.name || 'User'}</h2>
+                      <Badge className="bg-green-100 text-green-800">{profile.role || 'Volunteer'}</Badge>
                     </div>
-                    <p className="text-gray-600 mb-2">{profile.profession}</p>
+                    <p className="text-gray-600 mb-2">{profile.profession || 'Not specified'}</p>
                     <div className="flex items-center gap-4 text-sm text-gray-500">
                       <span className="flex items-center gap-1">
                         <Calendar className="h-4 w-4" />
-                        Joined {new Date(profile.joinDate).toLocaleDateString()}
+                        Joined {profile.createdAt ? new Date(profile.createdAt).toLocaleDateString() : 'Recently'}
                       </span>
-                      <Badge className="bg-green-100 text-green-800">Active Volunteer</Badge>
+                      <Badge className="bg-purple-100 text-purple-800">Active Member</Badge>
                     </div>
                   </div>
                 </div>
@@ -184,47 +219,47 @@ const VolunteerProfile = () => {
                       <Input
                         id="email"
                         type="email"
-                        value={editedProfile.email}
+                        value={editedProfile.email || ''}
                         onChange={(e) => handleInputChange('email', e.target.value)}
                       />
                     ) : (
                       <div className="flex items-center gap-2 p-2 bg-gray-50 rounded-md">
                         <Mail className="h-4 w-4 text-gray-400" />
-                        <span>{profile.email}</span>
+                        <span>{profile.email || 'Not provided'}</span>
                       </div>
                     )}
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="phone">Phone</Label>
+                    <Label htmlFor="contactNumber">Phone</Label>
                     {isEditing ? (
                       <Input
-                        id="phone"
+                        id="contactNumber"
                         type="tel"
-                        value={editedProfile.phone}
-                        onChange={(e) => handleInputChange('phone', e.target.value)}
+                        value={editedProfile.contactNumber || ''}
+                        onChange={(e) => handleInputChange('contactNumber', e.target.value)}
                       />
                     ) : (
                       <div className="flex items-center gap-2 p-2 bg-gray-50 rounded-md">
                         <Phone className="h-4 w-4 text-gray-400" />
-                        <span>{profile.phone}</span>
+                        <span>{profile.contactNumber || 'Not provided'}</span>
                       </div>
                     )}
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="dateOfBirth">Date of Birth</Label>
+                    <Label htmlFor="dob">Date of Birth</Label>
                     {isEditing ? (
                       <Input
-                        id="dateOfBirth"
+                        id="dob"
                         type="date"
-                        value={editedProfile.dateOfBirth}
-                        onChange={(e) => handleInputChange('dateOfBirth', e.target.value)}
+                        value={editedProfile.dob || ''}
+                        onChange={(e) => handleInputChange('dob', e.target.value)}
                       />
                     ) : (
                       <div className="flex items-center gap-2 p-2 bg-gray-50 rounded-md">
                         <Calendar className="h-4 w-4 text-gray-400" />
-                        <span>{new Date(profile.dateOfBirth).toLocaleDateString()}</span>
+                        <span>{profile.dob ? new Date(profile.dob).toLocaleDateString() : 'Not provided'}</span>
                       </div>
                     )}
                   </div>
@@ -234,17 +269,51 @@ const VolunteerProfile = () => {
                     {isEditing ? (
                       <select
                         id="gender"
-                        value={editedProfile.gender}
+                        value={editedProfile.gender || ''}
                         onChange={(e) => handleInputChange('gender', e.target.value)}
                         className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                       >
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                        <option value="Other">Other</option>
+                        <option value="">Select Gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
                       </select>
                     ) : (
                       <div className="p-2 bg-gray-50 rounded-md">
-                        <span>{profile.gender}</span>
+                        <span>{profile.gender || 'Not provided'}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="profession">Profession</Label>
+                    {isEditing ? (
+                      <Input
+                        id="profession"
+                        value={editedProfile.profession || ''}
+                        onChange={(e) => handleInputChange('profession', e.target.value)}
+                      />
+                    ) : (
+                      <div className="flex items-center gap-2 p-2 bg-gray-50 rounded-md">
+                        <Briefcase className="h-4 w-4 text-gray-400" />
+                        <span>{profile.profession || 'Not provided'}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="emergencyContactNumber">Emergency Contact</Label>
+                    {isEditing ? (
+                      <Input
+                        id="emergencyContactNumber"
+                        type="tel"
+                        value={editedProfile.emergencyContactNumber || ''}
+                        onChange={(e) => handleInputChange('emergencyContactNumber', e.target.value)}
+                      />
+                    ) : (
+                      <div className="flex items-center gap-2 p-2 bg-gray-50 rounded-md">
+                        <Phone className="h-4 w-4 text-gray-400" />
+                        <span>{profile.emergencyContactNumber || 'Not provided'}</span>
                       </div>
                     )}
                   </div>
@@ -257,30 +326,32 @@ const VolunteerProfile = () => {
                     <div className="md:col-span-2 space-y-2">
                       <Label htmlFor="address">Street Address</Label>
                       {isEditing ? (
-                        <Input
+                        <textarea
                           id="address"
-                          value={editedProfile.address}
+                          value={editedProfile.address || ''}
                           onChange={(e) => handleInputChange('address', e.target.value)}
+                          rows={3}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                         />
                       ) : (
-                        <div className="flex items-center gap-2 p-2 bg-gray-50 rounded-md">
-                          <MapPin className="h-4 w-4 text-gray-400" />
-                          <span>{profile.address}</span>
+                        <div className="flex items-start gap-2 p-2 bg-gray-50 rounded-md min-h-[60px]">
+                          <MapPin className="h-4 w-4 text-gray-400 mt-1" />
+                          <span>{profile.address || 'Not provided'}</span>
                         </div>
                       )}
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="city">City</Label>
+                      <Label htmlFor="area">Area</Label>
                       {isEditing ? (
                         <Input
-                          id="city"
-                          value={editedProfile.city}
-                          onChange={(e) => handleInputChange('city', e.target.value)}
+                          id="area"
+                          value={editedProfile.area || ''}
+                          onChange={(e) => handleInputChange('area', e.target.value)}
                         />
                       ) : (
                         <div className="p-2 bg-gray-50 rounded-md">
-                          <span>{profile.city}</span>
+                          <span>{profile.area || 'Not provided'}</span>
                         </div>
                       )}
                     </div>
@@ -290,12 +361,27 @@ const VolunteerProfile = () => {
                       {isEditing ? (
                         <Input
                           id="state"
-                          value={editedProfile.state}
+                          value={editedProfile.state || ''}
                           onChange={(e) => handleInputChange('state', e.target.value)}
                         />
                       ) : (
                         <div className="p-2 bg-gray-50 rounded-md">
-                          <span>{profile.state}</span>
+                          <span>{profile.state || 'Not provided'}</span>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="pinCode">Pin Code</Label>
+                      {isEditing ? (
+                        <Input
+                          id="pinCode"
+                          value={editedProfile.pinCode || ''}
+                          onChange={(e) => handleInputChange('pinCode', e.target.value)}
+                        />
+                      ) : (
+                        <div className="p-2 bg-gray-50 rounded-md">
+                          <span>{profile.pinCode || 'Not provided'}</span>
                         </div>
                       )}
                     </div>
@@ -304,96 +390,148 @@ const VolunteerProfile = () => {
 
                 {/* Skills */}
                 <div className="space-y-2">
-                  <Label>Skills</Label>
-                  <div className="flex flex-wrap gap-2">
-                    {profile.skills?.map((skill, index) => (
-                      <Badge key={index} className="bg-purple-100 text-purple-800">
-                        {skill}
-                      </Badge>
-                    ))}
-                  </div>
+                  <Label htmlFor="skills">Skills</Label>
+                  {isEditing ? (
+                    <Input
+                      id="skills"
+                      value={Array.isArray(editedProfile.skills) ? editedProfile.skills.join(', ') : (editedProfile.skills || '')}
+                      onChange={(e) => handleInputChange('skills', e.target.value.split(',').map(s => s.trim()).filter(s => s))}
+                      placeholder="e.g., Teaching, IT, Marketing (comma separated)"
+                    />
+                  ) : (
+                    <div className="flex flex-wrap gap-2">
+                      {(Array.isArray(profile.skills) ? profile.skills : (profile.skills ? profile.skills.split(',').map(s => s.trim()) : [])).map((skill, index) => (
+                        <Badge key={index} className="bg-purple-100 text-purple-800">
+                          {skill}
+                        </Badge>
+                      ))}
+                      {(!profile.skills || (Array.isArray(profile.skills) && profile.skills.length === 0)) && (
+                        <span className="text-gray-500 text-sm">No skills added</span>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 {/* Volunteer Preferences */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label>Preferred Area</Label>
-                    <div className="p-2 bg-gray-50 rounded-md">
-                      <span>{profile.preferredArea}</span>
-                    </div>
+                    <Label htmlFor="areaOfVolunteering">Preferred Area</Label>
+                    {isEditing ? (
+                      <select
+                        id="areaOfVolunteering"
+                        value={editedProfile.areaOfVolunteering || ''}
+                        onChange={(e) => handleInputChange('areaOfVolunteering', e.target.value)}
+                        className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                      >
+                        <option value="">Select Area</option>
+                        <option value="fieldWork">Field Work</option>
+                        <option value="online">Online</option>
+                        <option value="fundraising">Fundraising</option>
+                        <option value="training">Training</option>
+                      </select>
+                    ) : (
+                      <div className="p-2 bg-gray-50 rounded-md">
+                        <span>{profile.areaOfVolunteering || 'Not specified'}</span>
+                      </div>
+                    )}
                   </div>
 
                   <div className="space-y-2">
-                    <Label>Availability</Label>
-                    <div className="p-2 bg-gray-50 rounded-md">
-                      <span>{profile.availability}</span>
-                    </div>
+                    <Label htmlFor="availability">Availability</Label>
+                    {isEditing ? (
+                      <select
+                        id="availability"
+                        value={editedProfile.availability || ''}
+                        onChange={(e) => handleInputChange('availability', e.target.value)}
+                        className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                      >
+                        <option value="">Select Availability</option>
+                        <option value="morning">Morning</option>
+                        <option value="afternoon">Afternoon</option>
+                        <option value="evening">Evening</option>
+                        <option value="weekend">Weekend</option>
+                      </select>
+                    ) : (
+                      <div className="p-2 bg-gray-50 rounded-md">
+                        <span>{profile.availability || 'Not specified'}</span>
+                      </div>
+                    )}
                   </div>
                 </div>
               </CardContent>
             </Card>
           </div>
 
-          {/* Stats and Achievements */}
+          {/* Account Information */}
           <div className="space-y-6">
-            {/* Impact Stats */}
+            {/* Account Details */}
             <Card className="border-0 shadow-sm">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <TrendingUp className="h-5 w-5 text-green-600" />
-                  Impact Summary
+                  <User className="h-5 w-5 text-blue-600" />
+                  Account Information
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="text-center">
-                  <p className="text-3xl font-bold text-purple-600 mb-1">{profile.impactScore}</p>
-                  <p className="text-sm text-gray-600">Impact Score</p>
-                </div>
-
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Hours Contributed</span>
-                    <span className="font-semibold">{profile.totalHours}h</span>
+                    <span className="text-sm text-gray-600">User ID</span>
+                    <span className="font-semibold text-sm">{profile._id?.slice(-8) || 'N/A'}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Tasks Completed</span>
-                    <span className="font-semibold">{profile.tasksCompleted}</span>
+                    <span className="text-sm text-gray-600">Member ID</span>
+                    <span className="font-semibold text-sm">{profile.memberId || 'Not assigned'}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Events Attended</span>
-                    <span className="font-semibold">{profile.eventsAttended}</span>
+                    <span className="text-sm text-gray-600">Role</span>
+                    <Badge className="bg-purple-100 text-purple-800 text-xs">{profile.role || 'Member'}</Badge>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Certificates</span>
-                    <span className="font-semibold">{profile.certificatesEarned}</span>
+                    <span className="text-sm text-gray-600">Account Status</span>
+                    <Badge className="bg-green-100 text-green-800 text-xs">Active</Badge>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-600">Last Updated</span>
+                    <span className="font-semibold text-sm">{profile.updatedAt ? new Date(profile.updatedAt).toLocaleDateString() : 'Recently'}</span>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            {/* Recent Achievements */}
+            {/* Quick Actions */}
             <Card className="border-0 shadow-sm">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Award className="h-5 w-5 text-yellow-600" />
-                  Recent Achievements
+                  <Clock className="h-5 w-5 text-orange-600" />
+                  Quick Actions
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {profile.recentAchievements?.map((achievement) => (
-                    <div key={achievement.id} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                      <div className="p-2 bg-yellow-100 rounded-full">
-                        {achievement.type === 'award' && <Award className="h-4 w-4 text-yellow-600" />}
-                        {achievement.type === 'certificate' && <FileText className="h-4 w-4 text-blue-600" />}
-                        {achievement.type === 'milestone' && <Star className="h-4 w-4 text-purple-600" />}
-                      </div>
-                      <div className="flex-1">
-                        <p className="font-medium text-gray-900 text-sm">{achievement.title}</p>
-                        <p className="text-xs text-gray-500">{new Date(achievement.date).toLocaleDateString()}</p>
-                      </div>
-                    </div>
-                  ))}
+                  <Button 
+                    variant="outline" 
+                    className="w-full justify-start"
+                    onClick={() => window.location.href = '/dashboard?tab=my-tasks'}
+                  >
+                    <FileText className="h-4 w-4 mr-2" />
+                    View My Tasks
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    className="w-full justify-start"
+                    onClick={() => window.location.href = '/dashboard?tab=volunteer-events'}
+                  >
+                    <Calendar className="h-4 w-4 mr-2" />
+                    Browse Events
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    className="w-full justify-start"
+                    onClick={() => alert('Feature coming soon!')}
+                  >
+                    <Award className="h-4 w-4 mr-2" />
+                    View Certificates
+                  </Button>
                 </div>
               </CardContent>
             </Card>
