@@ -30,7 +30,7 @@ const GallerySection = () => {
     { id: 12, src: img1, alt: 'Women Leadership Program' }
   ];
 
-  const displayedImages = showAll ? allImages : allImages.slice(0, 8);
+  const displayedImages = showAll ? allImages : allImages.slice(0, 2);
 
 
   return (
@@ -45,7 +45,7 @@ const GallerySection = () => {
         </div>
 
         {/* Gallery Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
           {displayedImages.map((image) => (
             <Card 
               key={image.id} 

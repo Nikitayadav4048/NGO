@@ -23,9 +23,6 @@ const Footer = () => {
                 <Facebook className="h-4 w-4 sm:h-5 sm:w-5" />
               </Button>
               <Button variant="ghost" size="sm" className="text-purple-400 hover:text-purple-300 p-2">
-                <Twitter className="h-4 w-4 sm:h-5 sm:w-5" />
-              </Button>
-              <Button variant="ghost" size="sm" className="text-purple-400 hover:text-purple-300 p-2">
                 <Instagram className="h-4 w-4 sm:h-5 sm:w-5" />
               </Button>
               <Button variant="ghost" size="sm" className="text-purple-400 hover:text-purple-300 p-2">
