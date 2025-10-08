@@ -3,6 +3,7 @@ import Header from '../components/Header'
 import HeroSection from './HeroSection'
 import AboutSection from './AboutSection'
 import MissionVisionSection from './MissionVisionSection'
+import WomenEmpowermentSection from './WomenEmpowermentSection'
 import TeamSection from './TeamSection'
 import GallerySection from './GallerySection'
 import ContactSection from './ContactSection'
@@ -16,6 +17,7 @@ const Home = () => {
         <HeroSection />
         <AboutSection />
         <MissionVisionSection />
+        <WomenEmpowermentSection />
         <TeamSection />
         <GallerySection />
         <ContactSection />

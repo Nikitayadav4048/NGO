@@ -11,38 +11,40 @@ const TeamSection = () => {
   const [selectedMember, setSelectedMember] = useState(null);
   const [showAll, setShowAll] = useState(false);
 
-  const getTeamImage = (name) => {
-    if (name === 'Hemant Manohar') return manoharImg;
-    if (name === 'Pooja Mogal') return poojaMongalImg;
-    if (name === 'Pooja Satankar') return poojaSarnakarImg;
-    if (name === 'Pranita Ji') return pranitaImg;
-    if (name === 'Reetu') return reetuImg;
-    return null;
-  };
-
-  const teamMembers = siteContent.team.map((member, index) => ({
-    id: index + 1,
-    name: member.name,
-    role: member.position,
-    location: 'Delhi',
-    description: member.bio,
-    image: getTeamImage(member.name),
-    skills: ['Leadership', 'Social Work', 'Community Development']
-  }));
-
-  // Define the order of team members
-  const teamOrder = [
-    'Pooja Satankar', 'Pooja Mogal', 'Shruti Agrawal', 'Smrat', 'Prabhat Agrawal',
+  // Define Core Team Members (Management Team)
+  const coreTeamNames = ['Pooja Satankar', 'Pooja Mogal', 'Shruti Agrawal', 'Smrat', 'Prabhat Agrawal'];
+  
+  // Define Managing Members (Main Team)
+  const managingTeamNames = [
     'Ruchi Verma', 'Pranita Ji', 'Utkarsh', 'Shubham', 'Pooja',
     'Harsh', 'Reetu', 'Chaya', 'Geetanjali', 'Hemant Manohar', 'Sourabh'
   ];
 
-  // Sort team members according to the defined order
-  const sortedTeamMembers = teamMembers.sort((a, b) => {
-    const indexA = teamOrder.indexOf(a.name);
-    const indexB = teamOrder.indexOf(b.name);
-    return indexA - indexB;
+  const getTeamImage = (name, isCore = false) => {
+    // Only show photos for Core Team Members
+    if (!isCore) return null;
+    
+    if (name === 'Pooja Mogal') return poojaMongalImg;
+    if (name === 'Pooja Satankar') return poojaSarnakarImg;
+    return null;
+  };
+
+  const teamMembers = siteContent.team.map((member, index) => {
+    const isCore = coreTeamNames.includes(member.name);
+    return {
+      id: index + 1,
+      name: member.name,
+      role: member.position,
+      location: 'Delhi',
+      description: member.bio,
+      image: getTeamImage(member.name, isCore),
+      skills: ['Leadership', 'Social Work', 'Community Development']
+    };
   });
+
+  // Separate team members into categories
+  const coreTeamMembers = teamMembers.filter(member => coreTeamNames.includes(member.name));
+  const managingTeamMembers = teamMembers.filter(member => managingTeamNames.includes(member.name));
 
 
 
@@ -63,53 +65,101 @@ const TeamSection = () => {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
-          {sortedTeamMembers.slice(0, showAll ? sortedTeamMembers.length : (window.innerWidth < 640 ? 2 : 8)).map((member) => (
-            <div 
-              key={member.id} 
-              className="bg-white rounded-lg sm:rounded-xl p-4 sm:p-6 lg:p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 text-center cursor-pointer"
-              onClick={() => openModal(member)}
-            >
-              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden mx-auto mb-4 sm:mb-6 border-2 border-purple-200">
-                {member.image ? (
-                  <img 
-                    src={member.image} 
-                    alt={member.name}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full bg-purple-100 flex items-center justify-center">
-                    <User className="h-8 w-8 sm:h-10 sm:w-10 text-purple-600" />
-                  </div>
-                )}
+        {/* Core Team Members */}
+        <div className="mb-12">
+          <h3 className="text-xl sm:text-2xl font-bold text-purple-600 text-center mb-8">
+            Core Team Members
+          </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6 lg:gap-8">
+            {coreTeamMembers.map((member) => (
+              <div 
+                key={member.id} 
+                className="bg-white rounded-lg sm:rounded-xl p-4 sm:p-6 lg:p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 text-center cursor-pointer"
+                onClick={() => openModal(member)}
+              >
+                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden mx-auto mb-4 sm:mb-6 border-2 border-purple-200">
+                  {member.image ? (
+                    <img 
+                      src={member.image} 
+                      alt={member.name}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-purple-100 flex items-center justify-center">
+                      <User className="h-8 w-8 sm:h-10 sm:w-10 text-purple-600" />
+                    </div>
+                  )}
+                </div>
+                
+                <h3 className="text-base sm:text-lg lg:text-xl font-bold text-gray-900 mb-2">
+                  {member.name}
+                </h3>
+                
+                <p className="text-purple-600 font-semibold mb-3 sm:mb-4 text-sm sm:text-base">
+                  {member.role}
+                </p>
+                
+                <div className="flex items-center justify-center text-gray-500">
+                  <MapPin className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
+                  <span className="text-xs sm:text-sm">{member.location}</span>
+                </div>
               </div>
-              
-              <h3 className="text-base sm:text-lg lg:text-xl font-bold text-gray-900 mb-2">
-                {member.name}
-              </h3>
-              
-              <p className="text-purple-600 font-semibold mb-3 sm:mb-4 text-sm sm:text-base">
-                {member.role}
-              </p>
-              
-              <div className="flex items-center justify-center text-gray-500">
-                <MapPin className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
-                <span className="text-xs sm:text-sm">{member.location}</span>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
-        {((window.innerWidth < 640 && sortedTeamMembers.length > 2) || (window.innerWidth >= 640 && sortedTeamMembers.length > 8)) && (
-          <div className="text-center mt-8">
-            <button
-              onClick={() => setShowAll(!showAll)}
-              className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
-            >
-              {showAll ? 'Show Less' : 'View More Team Members'}
-            </button>
+        {/* Managing Members */}
+        <div>
+          <h3 className="text-xl sm:text-2xl font-bold text-orange-600 text-center mb-8">
+            Managing Members
+          </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+            {managingTeamMembers.slice(0, showAll ? managingTeamMembers.length : (window.innerWidth < 640 ? 2 : 8)).map((member) => (
+              <div 
+                key={member.id} 
+                className="bg-white rounded-lg sm:rounded-xl p-4 sm:p-6 lg:p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 text-center cursor-pointer"
+                onClick={() => openModal(member)}
+              >
+                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden mx-auto mb-4 sm:mb-6 border-2 border-orange-200">
+                  {member.image ? (
+                    <img 
+                      src={member.image} 
+                      alt={member.name}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-orange-100 flex items-center justify-center">
+                      <User className="h-8 w-8 sm:h-10 sm:w-10 text-orange-600" />
+                    </div>
+                  )}
+                </div>
+                
+                <h3 className="text-base sm:text-lg lg:text-xl font-bold text-gray-900 mb-2">
+                  {member.name}
+                </h3>
+                
+                <p className="text-orange-600 font-semibold mb-3 sm:mb-4 text-sm sm:text-base">
+                  {member.role}
+                </p>
+                
+                <div className="flex items-center justify-center text-gray-500">
+                  <MapPin className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
+                  <span className="text-xs sm:text-sm">{member.location}</span>
+                </div>
+              </div>
+            ))}
           </div>
-        )}
+          {((window.innerWidth < 640 && managingTeamMembers.length > 2) || (window.innerWidth >= 640 && managingTeamMembers.length > 8)) && (
+            <div className="text-center mt-8">
+              <button
+                onClick={() => setShowAll(!showAll)}
+                className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+              >
+                {showAll ? 'Show Less' : 'View More Managing Members'}
+              </button>
+            </div>
+          )}
+        </div>
 
         {/* Modal */}
         {selectedMember && (
