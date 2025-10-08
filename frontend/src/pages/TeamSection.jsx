@@ -6,18 +6,19 @@ import poojaMongalImg from '../assets/team-member/Pooja mongal.jpg';
 import poojaSarnakarImg from '../assets/team-member/Pooja Sarnakar.jpg';
 import pranitaImg from '../assets/team-member/Pranita Dixit.jpg';
 import reetuImg from '../assets/team-member/Reetu Agrawal.jpg';
+import prabhatAgrawalImg from '../assets/team-member/prabhat agrawal.jpg';
 
 const TeamSection = () => {
   const [selectedMember, setSelectedMember] = useState(null);
   const [showAll, setShowAll] = useState(false);
 
   // Define Core Team Members (Management Team)
-  const coreTeamNames = ['Pooja Satankar', 'Pooja Mogal', 'Shruti Agrawal', 'Smrat', 'Prabhat Agrawal'];
+  const coreTeamNames = ['Pooja Satankar', 'Pooja Mogal', 'Shruti Agrawal', 'Prabhat Agrawal', 'Reetu'];
   
   // Define Managing Members (Main Team)
   const managingTeamNames = [
     'Ruchi Verma', 'Pranita Ji', 'Utkarsh', 'Shubham', 'Pooja',
-    'Harsh', 'Reetu', 'Chaya', 'Geetanjali', 'Hemant Manohar', 'Sourabh'
+    'Harsh', 'Manohar', 'Chaya', 'Geetanjali', 'Hemant Manohar', 'Sourabh'
   ];
 
   const getTeamImage = (name, isCore = false) => {
@@ -26,6 +27,8 @@ const TeamSection = () => {
     
     if (name === 'Pooja Mogal') return poojaMongalImg;
     if (name === 'Pooja Satankar') return poojaSarnakarImg;
+    if (name === 'Prabhat Agrawal') return prabhatAgrawalImg;
+    if (name === 'Reetu') return reetuImg;
     return null;
   };
 
@@ -190,7 +193,7 @@ const TeamSection = () => {
                 </p>
 
 
-
+ 
                 {/* Description */}
                 <p className="text-gray-600 text-xs sm:text-sm leading-relaxed mb-4 sm:mb-6">
                   {selectedMember.description}
