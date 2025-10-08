@@ -1,9 +1,24 @@
 import React, { useState } from 'react';
-import { MapPin, X, Mail } from 'lucide-react';
+import { MapPin, X, Mail, User } from 'lucide-react';
 import { siteContent } from '../data/content.js';
+import manoharImg from '../assets/team-member/Manohar Patel.jpg';
+import poojaMongalImg from '../assets/team-member/Pooja mongal.jpg';
+import poojaSarnakarImg from '../assets/team-member/Pooja Sarnakar.jpg';
+import pranitaImg from '../assets/team-member/Pranita Dixit.jpg';
+import reetuImg from '../assets/team-member/Reetu Agrawal.jpg';
 
 const TeamSection = () => {
   const [selectedMember, setSelectedMember] = useState(null);
+  const [showAll, setShowAll] = useState(false);
+
+  const getTeamImage = (name) => {
+    if (name === 'Hemant Manohar') return manoharImg;
+    if (name === 'Pooja Mogal') return poojaMongalImg;
+    if (name === 'Pooja Satankar') return poojaSarnakarImg;
+    if (name === 'Pranita Ji') return pranitaImg;
+    if (name === 'Reetu') return reetuImg;
+    return null;
+  };
 
   const teamMembers = siteContent.team.map((member, index) => ({
     id: index + 1,
@@ -11,8 +26,25 @@ const TeamSection = () => {
     role: member.position,
     location: 'Delhi',
     description: member.bio,
+    image: getTeamImage(member.name),
     skills: ['Leadership', 'Social Work', 'Community Development']
   }));
+
+  // Define the order of team members
+  const teamOrder = [
+    'Pooja Satankar', 'Pooja Mogal', 'Shruti Agrawal', 'Smrat', 'Prabhat Agrawal',
+    'Ruchi Verma', 'Pranita Ji', 'Utkarsh', 'Shubham', 'Pooja',
+    'Harsh', 'Reetu', 'Chaya', 'Geetanjali', 'Hemant Manohar', 'Sourabh'
+  ];
+
+  // Sort team members according to the defined order
+  const sortedTeamMembers = teamMembers.sort((a, b) => {
+    const indexA = teamOrder.indexOf(a.name);
+    const indexB = teamOrder.indexOf(b.name);
+    return indexA - indexB;
+  });
+
+
 
   const openModal = (member) => {
     setSelectedMember(member);
@@ -31,43 +63,25 @@ const TeamSection = () => {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
-          {teamMembers.map((member) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+          {sortedTeamMembers.slice(0, showAll ? sortedTeamMembers.length : (window.innerWidth < 640 ? 2 : 8)).map((member) => (
             <div 
               key={member.id} 
               className="bg-white rounded-lg sm:rounded-xl p-4 sm:p-6 lg:p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 text-center cursor-pointer"
               onClick={() => openModal(member)}
             >
-              <div className="w-16 h-16 sm:w-20 sm:h-20 bg-black rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
-                <svg 
-                  width="32" 
-                  height="32" 
-                  viewBox="0 0 24 24" 
-                  fill="none" 
-                  className="text-white sm:w-10 sm:h-10"
-                >
-                  <path 
-                    d="M12 2L2 7L12 12L22 7L12 2Z" 
-                    stroke="currentColor" 
-                    strokeWidth="2" 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round"
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden mx-auto mb-4 sm:mb-6 border-2 border-purple-200">
+                {member.image ? (
+                  <img 
+                    src={member.image} 
+                    alt={member.name}
+                    className="w-full h-full object-cover"
                   />
-                  <path 
-                    d="M2 17L12 22L22 17" 
-                    stroke="currentColor" 
-                    strokeWidth="2" 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round"
-                  />
-                  <path 
-                    d="M2 12L12 17L22 12" 
-                    stroke="currentColor" 
-                    strokeWidth="2" 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round"
-                  />
-                </svg>
+                ) : (
+                  <div className="w-full h-full bg-purple-100 flex items-center justify-center">
+                    <User className="h-8 w-8 sm:h-10 sm:w-10 text-purple-600" />
+                  </div>
+                )}
               </div>
               
               <h3 className="text-base sm:text-lg lg:text-xl font-bold text-gray-900 mb-2">
@@ -85,6 +99,17 @@ const TeamSection = () => {
             </div>
           ))}
         </div>
+
+        {((window.innerWidth < 640 && sortedTeamMembers.length > 2) || (window.innerWidth >= 640 && sortedTeamMembers.length > 8)) && (
+          <div className="text-center mt-8">
+            <button
+              onClick={() => setShowAll(!showAll)}
+              className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+            >
+              {showAll ? 'Show Less' : 'View More Team Members'}
+            </button>
+          </div>
+        )}
 
         {/* Modal */}
         {selectedMember && (
@@ -104,37 +129,19 @@ const TeamSection = () => {
                   {selectedMember.name}
                 </h2>
 
-                {/* Profile Icon */}
-                <div className="w-20 h-20 sm:w-24 sm:h-24 bg-black rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
-                  <svg 
-                    width="40" 
-                    height="40" 
-                    viewBox="0 0 24 24" 
-                    fill="none" 
-                    className="text-white sm:w-12 sm:h-12"
-                  >
-                    <path 
-                      d="M12 2L2 7L12 12L22 7L12 2Z" 
-                      stroke="currentColor" 
-                      strokeWidth="2" 
-                      strokeLinecap="round" 
-                      strokeLinejoin="round"
+                {/* Profile Image */}
+                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden mx-auto mb-4 sm:mb-6 border-2 border-purple-200">
+                  {selectedMember.image ? (
+                    <img 
+                      src={selectedMember.image} 
+                      alt={selectedMember.name}
+                      className="w-full h-full object-cover"
                     />
-                    <path 
-                      d="M2 17L12 22L22 17" 
-                      stroke="currentColor" 
-                      strokeWidth="2" 
-                      strokeLinecap="round" 
-                      strokeLinejoin="round"
-                    />
-                    <path 
-                      d="M2 12L12 17L22 12" 
-                      stroke="currentColor" 
-                      strokeWidth="2" 
-                      strokeLinecap="round" 
-                      strokeLinejoin="round"
-                    />
-                  </svg>
+                  ) : (
+                    <div className="w-full h-full bg-purple-100 flex items-center justify-center">
+                      <User className="h-10 w-10 sm:h-12 sm:w-12 text-purple-600" />
+                    </div>
+                  )}
                 </div>
 
                 {/* Role */}

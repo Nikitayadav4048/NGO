@@ -7,22 +7,100 @@ export const siteContent = {
   
   team: [
     {
-      name: "Dr. Priya Sharma",
-      position: "Founder & CEO",
+      name: "Pooja Satankar",
+      position: "CEO",
       image: "/placeholder.png",
-      bio: "20+ years experience in women empowerment and social development"
+      bio: "Leading the organization with vision and strategic direction"
     },
     {
-      name: "Anita Devi",
-      position: "Program Director",
-      image: "/placeholder.png", 
-      bio: "Expert in skill development and vocational training programs"
+      name: "Pooja Mogal",
+      position: "COO",
+      image: "/placeholder.png",
+      bio: "Overseeing daily operations and organizational efficiency"
     },
     {
-      name: "Meera Singh",
-      position: "Community Outreach Head",
+      name: "Shruti Agrawal",
+      position: "CFO",
       image: "/placeholder.png",
-      bio: "Grassroots leader with extensive field experience"
+      bio: "Managing financial operations and strategic planning"
+    },
+    {
+      name: "Smrat",
+      position: "CMO",
+      image: "/placeholder.png",
+      bio: "Leading marketing initiatives and brand development"
+    },
+    {
+      name: "Prabhat Agrawal",
+      position: "CTO",
+      image: "/placeholder.png",
+      bio: "Driving technology innovation and digital transformation"
+    },
+    {
+      name: "Ruchi Verma",
+      position: "HR & Volunteer Head",
+      image: "/placeholder.png",
+      bio: "Managing human resources and volunteer coordination"
+    },
+    {
+      name: "Pranita Ji",
+      position: "Program Manager",
+      image: "/placeholder.png",
+      bio: "Overseeing program implementation and management"
+    },
+    {
+      name: "Utkarsh",
+      position: "Fundraising & Donor Relations Officer",
+      image: "/placeholder.png",
+      bio: "Managing fundraising activities and donor relationships"
+    },
+    {
+      name: "Shubham",
+      position: "Content & Social Media Manager",
+      image: "/placeholder.png",
+      bio: "Creating content and managing social media presence"
+    },
+    {
+      name: "Pooja",
+      position: "Operations Coordinator",
+      image: "/placeholder.png",
+      bio: "Coordinating operational activities and processes"
+    },
+    {
+      name: "Harsh",
+      position: "Community & Outreach Coordinator",
+      image: "/placeholder.png",
+      bio: "Building community relationships and outreach programs"
+    },
+    {
+      name: "Reetu",
+      position: "Assistant to CTO",
+      image: "/placeholder.png",
+      bio: "Supporting technology initiatives and CTO operations"
+    },
+    {
+      name: "Chaya",
+      position: "Volunteer Manager",
+      image: "/placeholder.png",
+      bio: "Managing volunteer programs and engagement"
+    },
+    {
+      name: "Geetanjali",
+      position: "Assistant Volunteer Manager",
+      image: "/placeholder.png",
+      bio: "Supporting volunteer management and coordination"
+    },
+    {
+      name: "Hemant Manohar",
+      position: "Assistant Volunteer Manager",
+      image: "/placeholder.png",
+      bio: "Assisting in volunteer coordination and activities"
+    },
+    {
+      name: "Sourabh",
+      position: "Assistant Volunteer Manager",
+      image: "/placeholder.png",
+      bio: "Supporting volunteer management operations"
     }
   ],
   
