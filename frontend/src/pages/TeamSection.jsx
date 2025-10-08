@@ -98,11 +98,6 @@ const TeamSection = () => {
                 <p className="text-purple-600 font-semibold mb-3 sm:mb-4 text-sm sm:text-base">
                   {member.role}
                 </p>
-                
-                <div className="flex items-center justify-center text-gray-500">
-                  <MapPin className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
-                  <span className="text-xs sm:text-sm">{member.location}</span>
-                </div>
               </div>
             ))}
           </div>
@@ -141,11 +136,6 @@ const TeamSection = () => {
                 <p className="text-orange-600 font-semibold mb-3 sm:mb-4 text-sm sm:text-base">
                   {member.role}
                 </p>
-                
-                <div className="flex items-center justify-center text-gray-500">
-                  <MapPin className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
-                  <span className="text-xs sm:text-sm">{member.location}</span>
-                </div>
               </div>
             ))}
           </div>
@@ -199,11 +189,7 @@ const TeamSection = () => {
                   {selectedMember.role}
                 </p>
 
-                {/* Location */}
-                <div className="flex items-center justify-center text-gray-500 mb-4 sm:mb-6">
-                  <MapPin className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
-                  <span className="text-xs sm:text-sm">{selectedMember.location}</span>
-                </div>
+
 
                 {/* Description */}
                 <p className="text-gray-600 text-xs sm:text-sm leading-relaxed mb-4 sm:mb-6">
