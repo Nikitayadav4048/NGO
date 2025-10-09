@@ -1,178 +1,162 @@
-# Orbosis Foundation - NGO Management System
+# ORBOSIS FOUNDATION – Website Content
 
-A comprehensive, fully responsive web application for managing NGO operations including member management, volunteer coordination, donation tracking, and certificate issuance.
+## ORBOSIS FOUNDATION
 
-## 🌟 Features
+### HOMEPAGE
 
-### 📱 Fully Responsive Design
-- **Mobile-First Approach**: Optimized for all screen sizes (320px to 1920px+)
-- **Touch-Friendly UI**: Proper button sizing and spacing for mobile devices
-- **Adaptive Layouts**: Responsive grids and flexible components
-- **Cross-Device Compatibility**: Works seamlessly on phones, tablets, and desktops
+**Tagline (Main Banner):**
+Where Women Lead Society Thrives.
 
-### 👥 User Management
-- **Multi-Role System**: Admin, Volunteer, Donor, and Member roles
-- **Role-Based Access Control**: Different dashboards and permissions
-- **User Authentication**: Secure login and session management
-- **Profile Management**: User-specific profile pages
+**Sub Tagline:**
+Together, we build a future where every woman can learn, earn, and lead with confidence.
 
-### 📊 Dashboard Features
-- **Admin Dashboard**: Complete overview with statistics and management tools
-- **Volunteer Dashboard**: Task management and event coordination
-- **Donor Dashboard**: Donation history and impact reports
-- **Responsive Analytics**: Mobile-friendly charts and statistics
+**Call-to-Action Buttons:**
+[Donate Now] [Volunteer With Us] [Know More]
 
-### 🎯 Core Modules
-- **Member Management**: Registration, profile management, and tracking
-- **Volunteer Coordination**: Task assignment and event management
-- **Donation Tracking**: Secure donation processing and receipt generation
-- **Certificate Management**: Digital certificate issuance with QR codes
-- **Gallery Management**: Photo uploads and gallery organization
-- **Beneficiary Management**: Beneficiary tracking and support
+**Hero Image Suggestion:**
+Image of women smiling, learning, or working in community groups.
 
-## 🛠️ Technology Stack
+## ABOUT US SECTION
 
-### Frontend
-- **React 18**: Modern React with hooks and functional components
-- **Tailwind CSS**: Utility-first CSS framework for responsive design
-- **Lucide React**: Beautiful, customizable icons
-- **React Router**: Client-side routing and navigation
-- **Responsive Design**: Mobile-first approach with Tailwind breakpoints
+### About Orbosis Foundation
 
-### Backend
-- **Node.js**: JavaScript runtime for server-side development
-- **Express.js**: Web application framework
-- **MongoDB**: NoSQL database for data storage
-- **Cloudinary**: Image upload and management
-- **JWT**: JSON Web Tokens for authentication
+Orbosis Foundation is a women empowerment NGO dedicated to uplifting underprivileged women and girls through education, skill development, and livelihood initiatives.
 
-## 📱 Responsive Breakpoints
+Our focus is to create sustainable change by equipping women with the tools, knowledge, and confidence they need to lead independent and fulfilling lives. We work in slum and rural communities to promote education, financial literacy, and skill-based employment.
 
-- **Mobile**: 0px - 640px (sm)
-- **Tablet**: 640px - 1024px (md/lg)
-- **Desktop**: 1024px+ (xl/2xl)
+We believe that when a woman stands strong, her entire community thrives.
 
-## 🚀 Getting Started
+**Mission:**
+To empower women through education, skills, and opportunities so they can live with dignity and independence.
 
-### Prerequisites
-- Node.js (v14 or higher)
-- MongoDB
-- Git
+**Vision:**
+A society where every woman has the right to learn, work, and lead a life of respect.
 
-### Installation
+**Core Values:**
+Compassion | Equality | Transparency | Growth | Community Empowerment
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/Nikitayadav4048/NGO.git
-   cd NGO
-   ```
+## OUR PROGRAMS
 
-2. **Install Frontend Dependencies**
-   ```bash
-   cd frontend
-   npm install
-   ```
+### What We Do – Our Key Programs
 
-3. **Install Backend Dependencies**
-   ```bash
-   cd ../backend
-   npm install
-   ```
+**1. Women Skill Development Workshops**
+Tailoring, handicrafts, and digital literacy classes for unemployed women.
+Helping women earn income through self-employment and micro-entrepreneurship.
 
-4. **Environment Setup**
-   
-   Create `.env` file in backend directory:
-   ```env
-   PORT=5000
-   MONGODB_URI=your_mongodb_connection_string
-   JWT_SECRET=your_jwt_secret
-   CLOUDINARY_CLOUD_NAME=your_cloudinary_name
-   CLOUDINARY_API_KEY=your_cloudinary_key
-   CLOUDINARY_API_SECRET=your_cloudinary_secret
-   ```
+**2. Adult Literacy Drive**
+Evening classes for women who missed formal education.
+Focus on reading, writing, and financial awareness.
 
-5. **Start the Application**
-   
-   Backend:
-   ```bash
-   cd backend
-   npm start
-   ```
-   
-   Frontend:
-   ```bash
-   cd frontend
-   npm run dev
-   ```
+**3. Girl Child Education Initiative**
+Supporting school education for girls in slum areas by providing books, tuition, and uniforms.
+Awareness drives to prevent school dropouts.
 
-## 📱 Mobile Optimization
+**4. Health & Hygiene Awareness**
+Sessions on menstrual hygiene, nutrition, and wellness.
+Distribution of hygiene kits and community awareness drives.
 
-### Key Responsive Features
-- **Collapsible Navigation**: Mobile-friendly sidebar and menu
-- **Touch Targets**: Minimum 44px for accessibility
-- **Scalable Typography**: Responsive text sizing
-- **Optimized Forms**: Mobile-friendly input fields
-- **Responsive Images**: Proper sizing and aspect ratios
-- **Gesture Support**: Touch-friendly interactions
+**5. Leadership & Self-Confidence Building**
+Mentorship programs to help women build confidence and leadership in their communities.
 
-### Performance Optimizations
-- **Lazy Loading**: Efficient component loading
-- **Optimized Images**: Responsive image sizing
-- **Minimal Bundle Size**: Efficient CSS and JavaScript
-- **Fast Loading**: Optimized for mobile networks
+## OUR PROJECTS
 
-## 🎨 UI/UX Features
+### Current & Upcoming Projects
 
-- **Modern Design**: Clean, professional interface
-- **Consistent Branding**: Purple and orange color scheme
-- **Intuitive Navigation**: Easy-to-use menu structure
-- **Accessibility**: WCAG compliant design
-- **Loading States**: Smooth user experience
-- **Error Handling**: User-friendly error messages
+**1. Project UDAAN – Skill Development for Rural Women**
+Providing professional tailoring and craft training to women in Indore and nearby areas.
+Over 150+ women have started small home-based businesses through this program.
 
-## 🔐 Security Features
+**2. Project SHIKSHA – Education for Every Girl**
+A campaign ensuring girls from slum areas continue their schooling.
+Provides learning kits, mentorship, and career guidance.
 
-- **Input Validation**: XSS and injection prevention
-- **Secure Authentication**: JWT-based auth system
-- **Data Sanitization**: Clean data processing
-- **Role-Based Access**: Secure permission system
+**3. Project SAHYOG – Support for Single Mothers**
+Offering financial training, micro-funding, and business support to single mothers and widows.
 
-## 📊 Analytics & Reporting
+**4. Project JAGRITI – Menstrual Health & Hygiene Awareness**
+Conducted workshops to promote menstrual hygiene and break societal taboos.
 
-- **Dashboard Analytics**: Real-time statistics
-- **Export Functionality**: CSV and Excel exports
-- **Report Generation**: Automated monthly reports
-- **Data Visualization**: Charts and graphs
+## OUR IMPACT
 
-## 🤝 Contributing
+### The Change We've Created So Far
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+- **Women Trained in Skills**: 500+
+- **Girls Enrolled in Schools**: 120+
+- **Health & Hygiene Workshops**: 30+
+- **Self-Help Groups Formed**: 15
+- **Community Volunteers Engaged**: 80+
 
-## 📄 License
+*"Empower a woman, and you empower an entire generation."*
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## MEET OUR TEAM
 
-## 👥 Team
+### The Faces Behind the Mission
 
-- **Developer**: Nikita Yadav
-- **Organization**: Orbosis Foundation
+**Pooja Satankar – CEO**
+Leads the overall vision, operations, and direction of Orbosis Foundation.
 
-## 📞 Support
+**Pooja Moogal – Chief Operating Officer (COO)**
+Oversees daily operations, program implementation, and coordination.
 
-For support and queries, please contact:
-- **Email**: info@orbosis.org
-- **Website**: [Orbosis Foundation](https://orbosis.org)
+**Shruti Agrawal – Chief Financial Officer (CFO)**
+Manages finances, budgeting, and transparency in all processes.
 
-## 🙏 Acknowledgments
+**Reetu Agrawal – Chief Marketing Officer (CMO)**
+Handles branding, social media, and public outreach campaigns.
 
-- Thanks to all contributors and volunteers
-- Special thanks to the Orbosis Foundation team
-- Icons by Lucide React
-- UI components inspired by modern design principles
+**Prabhat Agrawal – Chief Technology Officer (CTO)**
+Leads digital transformation, website development, and tech initiatives.
+
+## GET INVOLVED
+
+### Join Hands with Us
+
+Change begins with you. Support us through donations, volunteering, or partnerships — and be part of our movement for equality.
+
+**Buttons:**
+[Donate Now] [Volunteer With Us] [Partner With Us]
+
+## CONTACT US
+
+**Indore, Madhya Pradesh**
+info@orbosisfoundation.org
++91 9XXXXXXXXX
+www.orbosisfoundation.org
+
+## FOOTER
+
+**Quick Links:** Home | About | Programs | Projects | Impact | Contact
+**Social Media:** Instagram | Facebook | LinkedIn
+© 2025 Orbosis Foundation – Empowering Women, Transforming Lives.
+Registered NGO | All Rights Reserved
+
+**SEO META DATA**
+Home – Orbosis Foundation – Women Empowerment NGO
+About – Learn about our mission, vision, and leadership team.
+Programs – Explore our initiatives in education, skill development, and women welfare.
+Projects – Uplifting women and girls through skill training and education.
+Impact – See how Orbosis Foundation is changing lives.
+Contact – Get in touch to donate, volunteer, or collaborate.
+
+## 💫 Impact Story
+
+### Story of Hope – How One Sewing Machine Changed Rani's Life
+
+When Rani, a 29-year-old woman from a small slum area near Indore, first heard about Orbosis Foundation's Skill Development Workshop, she almost didn't come. She thought — 'People like us never get real help.'
+
+Rani was a single mother. Her husband had left, and she worked as a domestic helper, earning barely enough to feed her two children. Most days, she skipped her own meals to make sure her kids ate.
+
+One day, her neighbor told her about Orbosis Foundation's training sessions for women who wanted to learn tailoring and basic business skills. With hesitation, she joined — nervous, shy, and full of doubt.
+
+But over the next few months, everything changed. Rani learned how to stitch, manage orders, and even use a smartphone to take online tailoring work. She received her first sewing machine through the foundation's support program.
+
+The day she earned her first ₹500 from her own work, she cried — not because of the money, but because for the first time, she felt free.
+
+Today, Rani runs her small tailoring unit from home. She not only supports her children's education but also trains other women in her area for free every Sunday.
+
+"Orbosis Foundation didn't just teach me a skill," Rani says. "They taught me that I have the power to stand on my own feet."
+
+**Tagline: "Every woman deserves not sympathy — but a chance."**
 
 ---
 

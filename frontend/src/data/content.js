@@ -1,9 +1,9 @@
 export const siteContent = {
-  mission: "To empower women through skill development, education, and sustainable livelihood opportunities, creating a society where every woman can achieve her full potential.",
+  mission: "To empower women through education, skills, and opportunities so they can live with dignity and independence.",
   
-  vision: "A world where women are economically independent, socially empowered, and leaders in their communities.",
+  vision: "A society where every woman has the right to learn, work, and lead a life of respect.",
   
-  about: "Orbosis Foundation is dedicated to women empowerment through comprehensive programs in skill development, education, healthcare, and entrepreneurship. We believe in creating sustainable change by addressing root causes of gender inequality.",
+  about: "Orbosis Foundation is a women empowerment NGO dedicated to uplifting underprivileged women and girls through education, skill development, and livelihood initiatives. Our focus is to create sustainable change by equipping women with the tools, knowledge, and confidence they need to lead independent and fulfilling lives. We work in slum and rural communities to promote education, financial literacy, and skill-based employment. We believe that when a woman stands strong, her entire community thrives.",
   
   team: [
     {
@@ -25,7 +25,7 @@ export const siteContent = {
       bio: "Managing financial operations and strategic planning"
     },
     {
-      name: "Smrat",
+      name: "Reetu Agrawal",
       position: "CMO",
       image: "/placeholder.png",
       bio: "Leading marketing initiatives and brand development"
@@ -114,10 +114,10 @@ export const siteContent = {
   },
   
   contact: {
-    address: "123 Women Empowerment Center, Delhi - 110001",
-    phone: "+91 98765 43210",
-    email: "info@orbosis.org",
-    website: "https://orbosis.org"
+    address: "Indore, Madhya Pradesh",
+    phone: "+91 9XXXXXXXXX",
+    email: "info@orbosisfoundation.org",
+    website: "www.orbosisfoundation.org"
   },
   
   socialLinks: {

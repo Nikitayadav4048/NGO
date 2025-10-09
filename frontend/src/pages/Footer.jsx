@@ -15,8 +15,7 @@ const Footer = () => {
           <div className="sm:col-span-2 lg:col-span-1">
             <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4 text-purple-400">Orbosis Foundation</h3>
             <p className="text-gray-300 mb-4 text-sm sm:text-base leading-relaxed">
-              Empowering women and creating positive change in communities through 
-              education, skill development, and social support programs.
+              Empowering Women, Transforming Lives. A women empowerment NGO dedicated to uplifting underprivileged women and girls through education, skill development, and livelihood initiatives.
             </p>
             <div className="flex space-x-3 sm:space-x-4">
               <Button variant="ghost" size="sm" className="text-purple-400 hover:text-purple-300 p-2">
@@ -34,10 +33,11 @@ const Footer = () => {
           <div>
             <h4 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 text-purple-400">Quick Links</h4>
             <ul className="space-y-1.5 sm:space-y-2 text-gray-300">
-              <li><a href="#about" className="hover:text-white transition-colors text-sm sm:text-base">About Us</a></li>
-              <li><a href="#projects" className="hover:text-white transition-colors text-sm sm:text-base">Our Projects</a></li>
-              <li><a href="#volunteer-form" className="hover:text-white transition-colors text-sm sm:text-base">Volunteer</a></li>
-              <li><a href="#donation-form" className="hover:text-white transition-colors text-sm sm:text-base">Donate</a></li>
+              <li><a href="#home" className="hover:text-white transition-colors text-sm sm:text-base">Home</a></li>
+              <li><a href="#about" className="hover:text-white transition-colors text-sm sm:text-base">About</a></li>
+              <li><a href="#programs" className="hover:text-white transition-colors text-sm sm:text-base">Programs</a></li>
+              <li><a href="#projects" className="hover:text-white transition-colors text-sm sm:text-base">Projects</a></li>
+              <li><a href="#impact" className="hover:text-white transition-colors text-sm sm:text-base">Impact</a></li>
               <li><a href="#contact" className="hover:text-white transition-colors text-sm sm:text-base">Contact</a></li>
             </ul>
           </div>
@@ -45,11 +45,11 @@ const Footer = () => {
           <div>
             <h4 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 text-purple-400">Programs</h4>
             <ul className="space-y-1.5 sm:space-y-2 text-gray-300">
-              <li><a href="#" className="hover:text-white transition-colors text-sm sm:text-base">Skill Development</a></li>
-              <li><a href="#" className="hover:text-white transition-colors text-sm sm:text-base">Education Support</a></li>
-              <li><a href="#" className="hover:text-white transition-colors text-sm sm:text-base">Health Awareness</a></li>
-              <li><a href="#" className="hover:text-white transition-colors text-sm sm:text-base">Economic Empowerment</a></li>
-              <li><a href="#" className="hover:text-white transition-colors text-sm sm:text-base">Community Development</a></li>
+              <li><a href="#" className="hover:text-white transition-colors text-sm sm:text-base">Women Skill Development</a></li>
+              <li><a href="#" className="hover:text-white transition-colors text-sm sm:text-base">Adult Literacy Drive</a></li>
+              <li><a href="#" className="hover:text-white transition-colors text-sm sm:text-base">Girl Child Education</a></li>
+              <li><a href="#" className="hover:text-white transition-colors text-sm sm:text-base">Health & Hygiene</a></li>
+              <li><a href="#" className="hover:text-white transition-colors text-sm sm:text-base">Leadership Building</a></li>
             </ul>
           </div>
 
@@ -91,14 +91,11 @@ const Footer = () => {
               <p className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-1 sm:gap-2 text-sm">
                 <span className="flex items-center gap-1">
                   <span className="text-purple-400">©</span> {currentYear} 
-                  <span className="text-purple-400 font-semibold">Orbosis Foundation</span>
+                  <span className="text-purple-400 font-semibold">Orbosis Foundation – Empowering Women, Transforming Lives</span>
                 </span>
-                <span className="hidden sm:inline">•</span>
-                <span>All rights reserved</span>
               </p>
               <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-gray-400 text-center md:text-left">
-                🏛️ Registered under Section 8 of the Companies Act, 2013 
-                <span className="text-purple-400 block sm:inline sm:ml-2">• CIN: U85300DL2013NPL123456</span>
+                Registered NGO | All Rights Reserved
               </p>
             </div>
             <div className="flex flex-wrap justify-center gap-2 sm:gap-4 text-xs sm:text-sm">

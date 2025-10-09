@@ -13,7 +13,7 @@ const TeamSection = () => {
   const [showAll, setShowAll] = useState(false);
 
   // Define Core Team Members (Management Team)
-  const coreTeamNames = ['Pooja Satankar', 'Pooja Mogal', 'Shruti Agrawal', 'Prabhat Agrawal', 'Reetu'];
+  const coreTeamNames = ['Pooja Satankar', 'Pooja Mogal', 'Shruti Agrawal', 'Reetu Agrawal', 'Prabhat Agrawal'];
   
   // Define Managing Members (Main Team)
   const managingTeamNames = [
@@ -34,12 +34,27 @@ const TeamSection = () => {
 
   const teamMembers = siteContent.team.map((member, index) => {
     const isCore = coreTeamNames.includes(member.name);
+    let description = member.bio;
+    
+    // Update descriptions based on the new content
+    if (member.name === 'Pooja Satankar') {
+      description = 'Leads the overall vision, operations, and direction of Orbosis Foundation.';
+    } else if (member.name === 'Pooja Mogal') {
+      description = 'Oversees daily operations, program implementation, and coordination.';
+    } else if (member.name === 'Shruti Agrawal') {
+      description = 'Manages finances, budgeting, and transparency in all processes.';
+    } else if (member.name === 'Reetu Agrawal') {
+      description = 'Handles branding, social media, and public outreach campaigns.';
+    } else if (member.name === 'Prabhat Agrawal') {
+      description = 'Leads digital transformation, website development, and tech initiatives.';
+    }
+    
     return {
       id: index + 1,
       name: member.name,
       role: member.position,
-      location: 'Delhi',
-      description: member.bio,
+      location: 'Indore, Madhya Pradesh',
+      description: description,
       image: getTeamImage(member.name, isCore),
       skills: ['Leadership', 'Social Work', 'Community Development']
     };
@@ -64,14 +79,17 @@ const TeamSection = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12 sm:mb-16">
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 sm:mb-6">
-            Our Team
+            Meet Our Team
           </h2>
+          <p className="text-sm sm:text-base lg:text-lg xl:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed px-4 sm:px-0">
+            The Faces Behind the Mission
+          </p>
         </div>
 
         {/* Core Team Members */}
         <div className="mb-12">
           <h3 className="text-xl sm:text-2xl font-bold text-purple-600 text-center mb-8">
-            Core Team Members
+            Leadership Team
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6 lg:gap-8">
             {coreTeamMembers.map((member) => (

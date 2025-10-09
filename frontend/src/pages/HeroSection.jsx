@@ -64,17 +64,17 @@ const HeroSection = () => {
           <div className="space-y-6 lg:space-y-8 text-center lg:text-left">
             <div className="space-y-4 lg:space-y-6">
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
-                Empowering Women Through
-                <span className="text-purple-600"> Skills</span>
+                Where Women Lead
+                <span className="text-purple-600"> Society</span>
                 <span className="block">
                   <span className="bg-gradient-to-r from-orange-400 to-yellow-500 bg-clip-text text-transparent">
-                    Development
+                    Thrives
                   </span>
                 </span>
               </h1>
               
               <p className="text-base sm:text-lg lg:text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto lg:mx-0">
-                {t('hero.description')}
+                Together, we build a future where every woman can learn, earn, and lead with confidence.
               </p>
             </div>
 
@@ -122,6 +122,23 @@ const HeroSection = () => {
                   Donate Now
                 </Button>
               </Link>
+              <Link to="/volunteer-registration" className="w-full sm:w-auto">
+                <Button
+                  size="lg"
+                  className="w-full sm:w-auto bg-purple-600 hover:bg-purple-700 text-white px-6 sm:px-10 py-3 text-base sm:text-[17px] font-medium rounded-lg"
+                >
+                  Volunteer With Us
+                </Button>
+              </Link>
+              <a href="#about" className="w-full sm:w-auto">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="w-full sm:w-auto border border-orange-500 cursor-pointer text-orange-600 hover:bg-orange-100 hover:text-black px-6 sm:px-10 py-3 text-base sm:text-[17px] font-medium rounded-lg bg-white"
+                >
+                  Know More
+                </Button>
+              </a>
             </div>
           </div>
 

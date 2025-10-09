@@ -24,32 +24,39 @@ const MissionVisionSection = () => {
 
   const coreValues = [
     {
-      letter: 'E',
-      title: 'Empowerment',
-      subtitle: 'Building confidence and capabilities',
+      letter: 'C',
+      title: 'Compassion',
+      subtitle: 'Caring for every individual',
       bgColor: 'bg-purple-100',
       textColor: 'text-purple-600'
     },
     {
-      letter: 'I',
-      title: 'Inclusion',
-      subtitle: 'Embracing diversity and equality',
+      letter: 'E',
+      title: 'Equality',
+      subtitle: 'Equal opportunities for all',
       bgColor: 'bg-yellow-100',
       textColor: 'text-yellow-600'
     },
     {
-      letter: 'I',
-      title: 'Innovation',
-      subtitle: 'Creative solutions for change',
+      letter: 'T',
+      title: 'Transparency',
+      subtitle: 'Open and honest operations',
       bgColor: 'bg-pink-100',
       textColor: 'text-pink-600'
     },
     {
-      letter: 'S',
-      title: 'Sustainability',
-      subtitle: 'Long-term impact and growth',
+      letter: 'G',
+      title: 'Growth',
+      subtitle: 'Continuous development',
       bgColor: 'bg-green-100',
       textColor: 'text-green-600'
+    },
+    {
+      letter: 'C',
+      title: 'Community Empowerment',
+      subtitle: 'Strengthening communities',
+      bgColor: 'bg-blue-100',
+      textColor: 'text-blue-600'
     }
   ];
 
@@ -97,7 +104,7 @@ const MissionVisionSection = () => {
             Our Core Values
           </h2>
           
-          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6 lg:gap-8">
             {coreValues.map((value, index) => (
               <div key={index} className="text-center">
                 <div className={`w-16 h-16 sm:w-20 sm:h-20 ${value.bgColor} rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4`}>
